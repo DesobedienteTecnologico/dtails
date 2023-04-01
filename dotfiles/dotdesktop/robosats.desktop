@@ -1,0 +1,10 @@
+[Desktop Entry]
+Comment=A simple and private bitcoin exchange
+Name=RoboSats
+Exec=/usr/local/bin/tor-browser https://robosats.com
+Icon=/opt/logos/robosats.png
+Categories=Finance;Network;Bitcoin;
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/bitcoin;

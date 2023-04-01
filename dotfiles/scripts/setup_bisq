@@ -1,0 +1,66 @@
+#!/bin/bash
+
+echo "Change access rights of /var/run/tor/control.authcookie ..."
+chmod o+r /var/run/tor/control.authcookie
+echo "Create /etc/onion-grater.d/bisq.yml ..."
+echo "---
+- apparmor-profiles:
+    - '/opt/bisq/bin/Bisq'
+  users:
+    - 'amnesia'
+  commands:
+    AUTHCHALLENGE:
+      - 'SAFECOOKIE .*'
+    SETEVENTS:
+      - 'CIRC WARN ERR'
+      - 'CIRC ORCONN INFO NOTICE WARN ERR HS_DESC HS_DESC_CONTENT'
+    GETINFO:
+      - 'net/listeners/socks'
+    ADD_ONION:
+      - pattern:     'NEW:(\S+) Port=9999,(\S+)'
+        replacement: 'NEW:{} Port=9999,{client-address}:{}'
+      - pattern:     '(\S+):(\S+) Port=9999,(\S+)'
+        replacement: '{}:{} Port=9999,{client-address}:{}'
+    DEL_ONION:
+      - '.+'
+    HSFETCH:
+      - '.+'
+  events:
+    CIRC:
+      suppress: true
+    ORCONN:
+      suppress: true
+    INFO:
+      suppress: true
+    NOTICE:
+      suppress: true
+    WARN:
+      suppress: true
+    ERR:
+      suppress: true
+    HS_DESC:
+      response:
+        - pattern:     '650 HS_DESC CREATED (\S+) (\S+) (\S+) \S+ (.+)'
+          replacement: '650 HS_DESC CREATED {} {} {} redacted {}'
+        - pattern:     '650 HS_DESC UPLOAD (\S+) (\S+) .*'
+          replacement: '650 HS_DESC UPLOAD {} {} redacted redacted'
+        - pattern:     '650 HS_DESC UPLOADED (\S+) (\S+) .+'
+          replacement: '650 HS_DESC UPLOADED {} {} redacted'
+        - pattern:     '650 HS_DESC REQUESTED (\S+) NO_AUTH'
+          replacement: '650 HS_DESC REQUESTED {} NO_AUTH'
+        - pattern:     '650 HS_DESC REQUESTED (\S+) NO_AUTH \S+ \S+'
+          replacement: '650 HS_DESC REQUESTED {} NO_AUTH redacted redacted'
+        - pattern:     '650 HS_DESC RECEIVED (\S+) NO_AUTH \S+ \S+'
+          replacement: '650 HS_DESC RECEIVED {} NO_AUTH redacted redacted'
+        - pattern:     '.*'
+          replacement: ''
+    HS_DESC_CONTENT:
+      suppress: true" > /etc/onion-grater.d/bisq.yml
+
+cp /usr/share/applications/bisq-Bisq.desktop /usr/share/applications/bisq-Bisq-tor.desktop
+sed -i 's+Name=Bisq+Name=Bisq-Tor+' /usr/share/applications/bisq-Bisq-tor.desktop
+echo "Edit Bisq executable file ..."
+sed -i 's+Categories=Network+Categories=Network;Bitcoin;+' /usr/share/applications/bisq-Bisq-tor.desktop
+sed -i 's+Exec=/opt/bisq/bin/Bisq+Exec=/opt/bisq/bin/Bisq --torControlPort 9051 --torControlCookieFile=/var/run/tor/control.authcookie --torControlUseSafeCookieAuth+' /usr/share/applications/bisq-Bisq-tor.desktop
+sed -i 's+Categories=Network+Categories=Network;Bitcoin;+' /usr/share/applications/bisq-Bisq.desktop
+echo "Bisq installed successfully."

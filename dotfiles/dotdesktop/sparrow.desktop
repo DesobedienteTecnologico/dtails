@@ -1,0 +1,13 @@
+[Desktop Entry]
+Comment=Desktop Bitcoin Wallet focused on security and privacy
+Exec=/opt/Sparrow/bin/./Sparrow
+GenericName[en_US]=Bitcoin Wallet
+GenericName=Bitcoin Wallet
+Icon=/opt/Sparrow/lib/Sparrow.png
+Name[en_US]=Sparrow Bitcoin Wallet
+Name=Sparrow Bitcoin Wallet
+Categories=Finance;Network;
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/bitcoin;

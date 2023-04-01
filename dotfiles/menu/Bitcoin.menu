@@ -1,0 +1,18 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+ "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+<Menu>
+  <Name>Applications</Name>
+  <Menu>
+    <Name>Bitcoin</Name>
+    <Directory>Bitcoin.directory</Directory>
+    <Include>
+        <Filename>sparrow.desktop</Filename>
+        <Filename>electrum.desktop</Filename>
+        <Filename>bisq-Bisq.desktop</Filename>       
+        <Filename>bisq-Bisq-tor.desktop</Filename>
+        <Filename>robosats.desktop</Filename>       
+        <Filename>hodlhodl.desktop</Filename>
+        <Filename>bip39ian.desktop</Filename>
+    </Include>
+  </Menu>
+</Menu>

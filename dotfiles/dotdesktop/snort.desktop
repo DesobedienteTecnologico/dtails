@@ -1,0 +1,10 @@
+[Desktop Entry]
+Comment=Nostr client
+Name=Snort.social
+Exec=/usr/local/bin/tor-browser https://snort.social
+Icon=/opt/logos/snort.png
+Categories=Network;Nostr;
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Comment=A web tool for converting BIP39 mnemonic codes
+Name=BIP39 iancoleman
+Exec=/usr/local/bin/tor-browser /home/amnesia/Tor\ Browser/bip39-standalone.html
+Icon=/usr/share/icons/Adwaita/scalable/apps/user-info-symbolic.svg
+Categories=Finance;Network;Bitcoin;
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/bitcoin;
