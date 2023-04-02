@@ -52,7 +52,7 @@ def bisq():
         add_script_config("\n/tmp/./setup_bisq")
 
 def briar():
-    subprocess.run("wget https://desktop.briarproject.org/debs/bullseye/"+ briar_v +".deb", shell=True)
+    subprocess.run("wget https://desktop.briarproject.org/debs/bullseye/"+ briar_v +".deb -P shared_with_chroot", shell=True)
     add_script_config("\ndpkg -i /tmp/"+ briar_v +".deb")
 
 def nostr_web_clients():
