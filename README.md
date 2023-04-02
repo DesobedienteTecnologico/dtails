@@ -14,8 +14,7 @@
   <img src="https://img.shields.io/badge/%E2%9A%A1-dt%40getalby.com-orange">
   </a>
   <a href="http://btcpay.desobedientetecnologico.com/" title="Bitcoin / BIP47">
-  <img src="https://img.shields.io/badge/%20%F0%9F%A5%B7-btcpay.desobedientetecnologico.com-yellow?logo=bitcoin
-">
+  <img src="https://img.shields.io/badge/%20%F0%9F%A5%B7-btcpay.desobedientetecnologico.com-yellow?logo=bitcoin">
   </a>
   
 </p>
