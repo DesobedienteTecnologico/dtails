@@ -67,6 +67,7 @@ class MyApp(tk.Tk):
         self.create_checkbox(left_frame, "Bisq (222MB)", "")
         self.create_checkbox(left_frame, "BIP39 iancoleman (4.34MB)", "")
         self.create_checkbox(left_frame, "Hodl Hodl and RoboSats (~1MB)", "")
+        self.create_checkbox(left_frame, "Mempool.space (~1MB)", "")
         self.create_checkbox(left_frame, "Briar (221MB)", "")
         self.create_checkbox(left_frame, "Nostr web clients (~1MB)", "gobbler")
 
@@ -130,6 +131,11 @@ class MyApp(tk.Tk):
             if function == "iso_work":
                 iso_work_path = self.file_path.get()
                 iso_work(iso_work_path)
+            elif '.' in function:
+                print(function)
+                function = function.replace(".", "_")
+                function = eval(function)
+                function()
             else:
                 print(function)
                 function = eval(function)

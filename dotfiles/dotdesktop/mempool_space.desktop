@@ -1,0 +1,10 @@
+[Desktop Entry]
+Comment=Mempool Space
+Name=Mempool.space
+Exec=/usr/local/bin/tor-browser https://mempool.space
+Icon=/opt/logos/mempool_space.png
+Categories=Network;Bitcoin;
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=

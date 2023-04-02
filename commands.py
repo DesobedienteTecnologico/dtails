@@ -85,6 +85,15 @@ def hodl_hodl_and_robosats():
     add_script_config("\ncp /tmp/robosats.png /opt/logos/")
     add_script_config("\ncp /tmp/hodlhodl.png /opt/logos/")
 
+def mempool_space():
+    subprocess.run("cp dotfiles/dotdesktop/mempool_space.desktop shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/mempool_space.desktop /usr/share/applications/")
+    add_script_config("\nmkdir /opt/logos/")
+    subprocess.run("cp dotfiles/logos/mempool_space.png shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/mempool_space.png /opt/logos/")
+
+
+
 def thunderbird():
     add_script_config("\ndpkg -r --force-depends thunderbird")
 
