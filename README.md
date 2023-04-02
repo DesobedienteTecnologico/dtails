@@ -27,12 +27,7 @@ DTails is a tool to add software in Debian based live images like Tails. DTails 
 ## 📦 Packages requirements
 
 ```bash
-sudo apt-get install binwalk genisoimage live-boot squashfs-tools build-essential
-```
-
-And Python packages for the GUI:
-```bash
-pip install tk
+sudo apt-get install binwalk genisoimage live-boot squashfs-tools build-essential python3-tk python3-pil.imagetk
 ```
 
 ## 🛠 Getting started
