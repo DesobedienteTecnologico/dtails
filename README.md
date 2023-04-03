@@ -41,7 +41,7 @@ Once you have clone the repository and you get inside the directory. Run this to
 
 
 ```bash
-sudo python dtails.py
+sudo ./dtails.py
 ```
 
 #### Why sudo?
