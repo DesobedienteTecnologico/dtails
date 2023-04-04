@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "Change access rights of /var/run/tor/control.authcookie ..."
-chmod o+r /var/run/tor/control.authcookie
 echo "Create /etc/onion-grater.d/bisq.yml ..."
 echo "---
 - apparmor-profiles:
@@ -57,10 +55,7 @@ echo "---
     HS_DESC_CONTENT:
       suppress: true" > /etc/onion-grater.d/bisq.yml
 
-cp /usr/share/applications/bisq-Bisq.desktop /usr/share/applications/bisq-Bisq-tor.desktop
-sed -i 's+Name=Bisq+Name=Bisq-Tor+' /usr/share/applications/bisq-Bisq-tor.desktop
 echo "Edit Bisq executable file ..."
-sed -i 's+Categories=Network+Categories=Network;Bitcoin;+' /usr/share/applications/bisq-Bisq-tor.desktop
-sed -i 's+Exec=/opt/bisq/bin/Bisq+Exec=/opt/bisq/bin/Bisq --torControlPort 9051 --torControlCookieFile=/var/run/tor/control.authcookie --torControlUseSafeCookieAuth+' /usr/share/applications/bisq-Bisq-tor.desktop
+sed -i 's+Exec=/opt/bisq/bin/Bisq+Exec=chmod o+r /var/run/tor/control.authcookie && /opt/bisq/bin/Bisq --torControlPort 9051 --torControlCookieFile=/var/run/tor/control.authcookie --torControlUseSafeCookieAuth+' /usr/share/applications/bisq-Bisq.desktop
 sed -i 's+Categories=Network+Categories=Network;Bitcoin;+' /usr/share/applications/bisq-Bisq.desktop
 echo "Bisq installed successfully."
