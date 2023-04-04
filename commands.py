@@ -3,7 +3,7 @@ import subprocess
 import os
 
 # Variables
-sparrow_v = "sparrow-1.7.3-x86_64"
+sparrow_v = "1.7.4/sparrow-1.7.4-x86_64"
 bisq_v = "Bisq-64bit-1.9.9"
 briar_v = "briar-desktop-debian-bullseye"
 
@@ -33,7 +33,7 @@ def sparrow_wallet():
         subprocess.run("cp dotfiles/dotdesktop/sparrow.desktop shared_with_chroot/", shell=True)
         add_script_config("\ncp /tmp/sparrow.desktop /usr/share/applications/")
     else:
-        subprocess.run("wget https://github.com/sparrowwallet/sparrow/releases/download/1.7.3/"+ sparrow_v +".tar.gz -P shared_with_chroot", shell=True)
+        subprocess.run("wget https://github.com/sparrowwallet/sparrow/releases/download/"+ sparrow_v +".tar.gz -P shared_with_chroot", shell=True)
         add_script_config("\ntar -xvf /tmp/"+ sparrow_v +".tar.gz -C /opt")
         subprocess.run("cp dotfiles/dotdesktop/sparrow.desktop shared_with_chroot/", shell=True)
         add_script_config("\ncp /tmp/sparrow.desktop /usr/share/applications/")
@@ -174,7 +174,7 @@ def ending_chroot_and_cleaning_up():
 def remove_directories():
     ending_chroot_and_cleaning_up()
     subprocess.run("sudo rm -rf shared_with_chroot/ system_to_edit/ iso_mounted/ future_iso/", shell=True)
-    print("Remove directories. Done!")
+    print("Removing directories. Done!")
 
 # END Functions to unpack and pack the .iso
 
