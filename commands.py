@@ -3,7 +3,8 @@ import subprocess
 import os
 
 # Variables
-sparrow_v = "1.7.4/sparrow-1.7.4-x86_64"
+sparrow_url = "1.7.4/sparrow-1.7.4-x86_64"
+sparrow_v = "sparrow-1.7.4-x86_64"
 bisq_v = "Bisq-64bit-1.9.9"
 briar_v = "briar-desktop-debian-bullseye"
 
@@ -33,7 +34,7 @@ def sparrow_wallet():
         subprocess.run("cp dotfiles/dotdesktop/sparrow.desktop shared_with_chroot/", shell=True)
         add_script_config("\ncp /tmp/sparrow.desktop /usr/share/applications/")
     else:
-        subprocess.run("wget https://github.com/sparrowwallet/sparrow/releases/download/"+ sparrow_v +".tar.gz -P shared_with_chroot", shell=True)
+        subprocess.run("wget https://github.com/sparrowwallet/sparrow/releases/download/"+ sparrow_url +".tar.gz -P shared_with_chroot", shell=True)
         add_script_config("\ntar -xvf /tmp/"+ sparrow_v +".tar.gz -C /opt")
         subprocess.run("cp dotfiles/dotdesktop/sparrow.desktop shared_with_chroot/", shell=True)
         add_script_config("\ncp /tmp/sparrow.desktop /usr/share/applications/")
