@@ -49,18 +49,32 @@ Sudo is needed to mount the <b>.iso / .img</b> into a directory, as well to use 
 
 ### 1. 💿 Select the Tails .iso
 
-<img alt="Dtails" src="img/gui.png" width="400"/>
+<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/232882119-ad271dae-8931-43df-8728-963bede05d3a.png" width="400"/>
 
 ### 2. 📥 / 📤 Add or remove packages
  1. Click on the checkboxes to add (Left) or remove (Right) the software you like.
  2. Click on "Build" once you are ready to build your image.
 
-<img alt="Dtails" src="img/gui2.png" width="400"/>
+<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/232882410-0987ad34-d27e-453d-9fd7-1dfd04ef2843.png" width="400"/>
 
 You can keep track in that is happening in your terminal.
 
-### 3. 💽 That was all! :)
-You will get a dtails.iso image just in the same directory you run the GUI.
+<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/232882809-a968ec60-af05-4b01-9efd-be49760d76e2.png" width="800"/>
+
+
+### 3. 💽 .iso vs .img
+**❌ Persistence:** If you choose **.iso** image you will build an **DTail.iso** image in the same DTails directory.
+
+**✅ Persistence:** In case you choose **.img**, you will be redirected to the 3º tab where you can choose the flash drive to install your modified OS into it.
+
+<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/232884168-54e8653f-6262-41b0-9952-2845c62691bc.png" width="400"/>
+
+
+Connect your flash drive and choose the right one. (Double check it once you select it!)
+
+<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/232884954-36c62ea0-ac76-41a6-b6cc-6710ac90198b.png" width="400"/>
+
+
 
 ## DEMO
 <img alt="Dtails" src="img/demo.gif" width="400"/>
