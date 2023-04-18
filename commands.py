@@ -1,6 +1,8 @@
 import sys
 import subprocess
 import os
+import re
+import dtails
 
 # Variables
 sparrow_url = "1.7.4/sparrow-1.7.4-x86_64"
@@ -8,11 +10,28 @@ sparrow_v = "sparrow-1.7.4-x86_64"
 bisq_v = "Bisq-64bit-1.9.9"
 briar_v = "briar-desktop-debian-bullseye"
 
-# Functions to install or remove packages
+################## Print functions ##################
+def print_green(text):
+    color_start = "\033[0;32m"
+    color_end = "\033[00m"
+    print(color_start, text, color_end)
 
+def print_red(text):
+    color_start = "\033[0;31m"
+    color_end = "\033[00m"
+    print(color_start, text, color_end)
+
+def print_yellow(text):
+    color_start = "\033[0;93m"
+    color_end = "\033[00m"
+    print(color_start, text, color_end)
+################## End Print functions ##################
+
+
+################## Functions to install or remove packages ##################
 def add_script_config(text):
     if os.path.exists("shared_with_chroot"):
-        print("Directory already created")
+        pass
     else:
         subprocess.run("mkdir shared_with_chroot", shell=True)
     
@@ -26,14 +45,16 @@ def add_menu():
     add_script_config("\ncp /tmp/Bitcoin.menu /etc/xdg/menus/applications-merged/")
     add_script_config("\ncp /tmp/Nostr.menu /etc/xdg/menus/applications-merged/")
 
+################## Install packages ##################
 def sparrow_wallet():
     file = sparrow_v +".tar.gz"
     if os.path.exists("shared_with_chroot/"+ sparrow_v +".tar.gz"):
-        print(f"{file} already created. Skipping...\n")
+        print_yellow(f"{file} already created. Skipping...\n")
         add_script_config("\ntar -xvf /tmp/"+ sparrow_v +".tar.gz -C /opt")
         subprocess.run("cp dotfiles/dotdesktop/sparrow.desktop shared_with_chroot/", shell=True)
         add_script_config("\ncp /tmp/sparrow.desktop /usr/share/applications/")
     else:
+        print_green("Downloading...")
         subprocess.run("wget https://github.com/sparrowwallet/sparrow/releases/download/"+ sparrow_url +".tar.gz -P shared_with_chroot", shell=True)
         add_script_config("\ntar -xvf /tmp/"+ sparrow_v +".tar.gz -C /opt")
         subprocess.run("cp dotfiles/dotdesktop/sparrow.desktop shared_with_chroot/", shell=True)
@@ -42,7 +63,7 @@ def sparrow_wallet():
 def bisq():
     file = bisq_v +".deb"
     if os.path.exists("shared_with_chroot/"+ bisq_v +".deb"):
-        print(f"{file} already created. Skipping...\n")
+        print_yellow(f"{file} already created. Skipping...\n")
         add_script_config("\ndpkg -i /tmp/"+ bisq_v +".deb")
         subprocess.run("cp dotfiles/scripts/setup_bisq shared_with_chroot/", shell=True)
         add_script_config("\n/tmp/./setup_bisq")
@@ -66,7 +87,6 @@ def nostr_web_clients():
     subprocess.run("cp dotfiles/logos/iris_to.png shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/snort.png /opt/logos/")
     add_script_config("\ncp /tmp/iris_to.png /opt/logos/")
-
 
 def bip39_iancoleman():
     subprocess.run("wget https://github.com/iancoleman/bip39/releases/download/0.5.4/bip39-standalone.html -P shared_with_chroot", shell=True)
@@ -93,31 +113,18 @@ def mempool_space():
     subprocess.run("cp dotfiles/logos/mempool_space.png shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/mempool_space.png /opt/logos/")
 
-
-
+################## Remove packages ##################
 def thunderbird():
     add_script_config("\ndpkg -r --force-depends thunderbird")
 
 def gimp():
     add_script_config("\ndpkg -r --force-depends gimp")
 
+################## END Functions to install or remove packages ##################
 
-
-
-# END Functions to install or remove packages
-
-
-
-def chroot_script():    
-    #Create a script in share_with_chroot which is going to be run when we get into chroot
-    # Here I should put all the files needed to install o remove
-    add_script_config("\n#!/bin/bash\n\n")   
-    add_script_config("\nexport PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin\n")
-    
-# START Functions to unpack and pack the .iso
-
+################## START Functions to unpack and pack the final image ##################
 def iso_work(iso):
-    print("\nModifying the .iso and adding the new configurations...")
+    print_green("\nModifying the .iso and adding the new configurations...")
     
     # Create directories needed to work on
     subprocess.run("mkdir iso_mounted future_iso", shell=True) 
@@ -162,7 +169,7 @@ def iso_work(iso):
     ending_chroot_and_cleaning_up()
 
 def ending_chroot_and_cleaning_up():
-    print("Cleaning everything...\nWait please...")
+    print_green("Cleaning everything...\nWait please...")
     # Umount from host to chroot
     subprocess.run("sudo umount system_to_edit/run", shell=True)
     subprocess.run("sudo umount system_to_edit/dev", shell=True)
@@ -170,29 +177,56 @@ def ending_chroot_and_cleaning_up():
 
     # Umount .iso
     subprocess.run("sudo umount iso_mounted", shell=True)
-    print("Done!\nEnjoy! :)")
+    print_green("Done!\nimage umounted.")
 
-def remove_directories():
-    ending_chroot_and_cleaning_up()
-    subprocess.run("sudo rm -rf shared_with_chroot/ system_to_edit/ iso_mounted/ future_iso/", shell=True)
-    print("Removing directories. Done!")
+################## END Functions to unpack and pack the .iso ##################
 
-# END Functions to unpack and pack the .iso
-
-# START Function to build the .iso
+################## START Function to build the .iso ##################
 
 def build_iso(img):
-    print("\n\nGetting -unrecognize xattr prefix system.posix_acl_access- message. IS NOT AN ISSUE.\nThat happen because we are running it by scripts.\nThat is kind of know bug :) \n\n")
+    print_yellow("\n\nGetting -unrecognize xattr prefix system.posix_acl_access- message. IS NOT AN ISSUE.\nThat happen because we are running it by scripts.\nThat is kind of know bug :) \n\n")
     # Make squashfs
     subprocess.run("sudo mksquashfs system_to_edit/ filesystem.squashfs", shell=True)
     subprocess.run("mv filesystem.squashfs future_iso/live/", shell=True)
     # Build the .iso
-    print("\n\nBuilding the final .iso image...\n\n")
+    print_green("\n\nBuilding the final .iso image...\n\n")
     # Check if image is .iso or .img
     if img.endswith('.iso'):
         subprocess.run(["sudo genisoimage -r -J -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o dtails.iso future_iso/"], shell=True)
+        subprocess.run(["isohybrid dtails.iso"], shell=True)
+        print_yellow("dtails.iso image created")
     elif img.endswith('.img'):
-        subprocess.run(["sudo genisoimage -r -J -b syslinux/isolinux.bin -c syslinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o dtails.iso future_iso/"], shell=True)
-    print("\n\Image created!")
+        print_yellow("Plase, follow the GUI instructions.")
 
-# END Function to build the .iso
+################## END Function to build the .iso ##################
+
+
+
+def chroot_script():    
+    #Create a script in share_with_chroot which is going to be run when we get into chroot
+    # Here I should put all the files needed to install o remove
+    add_script_config("\n#!/bin/bash\n\n")   
+    add_script_config("\nexport PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin\n")
+    
+def remove_directories():
+    ending_chroot_and_cleaning_up()
+    subprocess.run("sudo rm -rf shared_with_chroot/ system_to_edit/ iso_mounted/ future_iso/ squashfs-root/ mount_p/", shell=True)
+    print_green("Removing directories. Done!")
+
+def install_image_to_device(device):
+    device = device.split(" - ")[1]
+    if device != None:
+        print_green("Formating device...")
+        subprocess.run("sudo parted -s "+device+" mklabel gpt", shell=True)
+        subprocess.run("sudo parted -s "+device+" mkpart primary fat32 0% 3GB name 1 Tails", shell=True)
+        subprocess.run("sudo parted -s "+device+" set 1 boot on", shell=True)
+        subprocess.run("sudo parted -s "+device+" set 1 hidden on", shell=True)
+        subprocess.run("sudo parted -s "+device+" set 1 legacy_boot on", shell=True)
+        subprocess.run("sudo parted -s "+device+" set 1 esp on", shell=True)
+        subprocess.run("sudo mkfs.fat -F 32 -n TAILS "+device+"1", shell=True)
+        print_green("Copying files to device...")
+        subprocess.run("sudo mkdir mount_p ; sudo mount "+device+"1 mount_p", shell=True)
+        subprocess.run("sudo cp -r future_iso/* mount_p ; sync ; sudo umount mount_p", shell=True)
+        subprocess.run("", shell=True)
+        print_green("Installed...\nDone!")
+        print_yellow("\nNow you can safely remove the flash drive\nCheck the tab About before closing this! :)\nEnjoy! 🤙")
