@@ -14,7 +14,7 @@ import threading
 class MyApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("DTails - Image Editor")
+        self.title("DTails")
 
         # Create tab views
         self.tab_control = ttk.Notebook(self)
@@ -22,7 +22,7 @@ class MyApp(tk.Tk):
         self.tab2 = ttk.Frame(self.tab_control)
         self.tab3 = ttk.Frame(self.tab_control)
         self.tab4 = ttk.Frame(self.tab_control)
-        self.tab_control.add(self.tab1, text='Select .iso')
+        self.tab_control.add(self.tab1, text='Select image')
         self.tab_control.add(self.tab2, text='Modify and Build the image')
         self.tab_control.add(self.tab3, text='Live install')
         self.tab_control.add(self.tab4, text='About')
