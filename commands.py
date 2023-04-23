@@ -5,8 +5,8 @@ import re
 import dtails
 
 # Variables
-sparrow_url = "1.7.4/sparrow-1.7.4-x86_64"
-sparrow_v = "sparrow-1.7.4-x86_64"
+sparrow_url = "1.7.6/sparrow-1.7.6-x86_64"
+sparrow_v = "sparrow-1.7.6-x86_64"
 bisq_v = "Bisq-64bit-1.9.9"
 briar_v = "briar-desktop-debian-bullseye"
 
