@@ -6,8 +6,9 @@ import dtails
 
 # Variables
 sparrow_url = "1.7.6/sparrow-1.7.6-x86_64"
-sparrow_v = "sparrow-1.7.6-x86_64"
-bisq_v = "Bisq-64bit-1.9.9"
+sparrow_v = sparrow_url.split("/")[1]
+bisq_url = "v1.9.9/Bisq-64bit-1.9.9"
+bisq_v = bisq_url.split("/")[1]
 briar_v = "briar-desktop-debian-bullseye"
 
 ################## Print functions ##################
@@ -68,7 +69,7 @@ def bisq():
         subprocess.run("cp dotfiles/scripts/setup_bisq shared_with_chroot/", shell=True)
         add_script_config("\n/tmp/./setup_bisq")
     else:
-        subprocess.run("wget https://bisq.network/downloads/v1.9.9/Bisq-64bit-1.9.9.deb -P shared_with_chroot", shell=True)
+        subprocess.run("wget https://bisq.network/downloads/"+ bisq_url +".deb -P shared_with_chroot", shell=True)
         add_script_config("\ndpkg -i /tmp/"+ bisq_v +".deb")
         subprocess.run("cp dotfiles/scripts/setup_bisq shared_with_chroot/", shell=True)
         add_script_config("\n/tmp/./setup_bisq")
