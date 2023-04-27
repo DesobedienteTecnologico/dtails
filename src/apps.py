@@ -97,6 +97,17 @@ def bip39_iancoleman():
     add_script_config("\ncp /tmp/bip39ian.desktop /usr/share/applications/")
     add_script_config("\ncp /tmp/bip39-standalone.html /etc/skel/Tor\ Browser/")
 
+def seedtool():
+    subprocess.run("wget -O shared_with_chroot/seedtool.html https://github.com/BitcoinQnA/seedtool/releases/download/2.0.2/index.html", shell=True)
+    subprocess.run("cp dotfiles/dotdesktop/seedtool.desktop shared_with_chroot/", shell=True)
+    add_script_config("\nmkdir /etc/skel/Tor\ Browser/")
+    add_script_config("\nmkdir /opt/logos/")
+    subprocess.run("cp dotfiles/logos/seedtool.png shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/seedtool.png /opt/logos/")
+    add_script_config("\ncp /tmp/seedtool.desktop /usr/share/applications/")
+    add_script_config("\ncp /tmp/seedtool.html /etc/skel/Tor\ Browser/")
+
+
 def hodl_hodl_and_robosats():
     subprocess.run("cp dotfiles/dotdesktop/robosats.desktop shared_with_chroot/", shell=True)
     subprocess.run("cp dotfiles/dotdesktop/hodlhodl.desktop shared_with_chroot/", shell=True)
