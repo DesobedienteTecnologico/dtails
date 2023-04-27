@@ -6,7 +6,8 @@ from tkinter import filedialog
 import tkinter.messagebox as msgbox
 from PIL import ImageTk, Image
 import os
-from commands import *
+from src.commands import *
+from src.apps import *
 import webbrowser
 import pyudev
 import threading
