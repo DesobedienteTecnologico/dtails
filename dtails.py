@@ -73,6 +73,7 @@ class MyApp(tk.Tk):
         self.create_checkbox(left_frame, "Sparrow Wallet (106MB)", "")
         self.create_checkbox(left_frame, "Bisq (222MB)", "")
         self.create_checkbox(left_frame, "BIP39 iancoleman (4.34MB)", "")
+        self.create_checkbox(left_frame, "SeedTool (6.58MB)", "")
         self.create_checkbox(left_frame, "Hodl Hodl and RoboSats (~1MB)", "")
         self.create_checkbox(left_frame, "Mempool.space (~1MB)", "")
         self.create_checkbox(left_frame, "Briar (221MB)", "")

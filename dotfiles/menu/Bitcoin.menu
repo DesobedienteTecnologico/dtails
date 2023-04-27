@@ -13,6 +13,7 @@
         <Filename>robosats.desktop</Filename>       
         <Filename>hodlhodl.desktop</Filename>
         <Filename>bip39ian.desktop</Filename>
+        <Filename>seedtool.desktop</Filename>
     </Include>
   </Menu>
 </Menu>
