@@ -107,6 +107,15 @@ def seedtool():
     add_script_config("\ncp /tmp/seedtool.desktop /usr/share/applications/")
     add_script_config("\ncp /tmp/seedtool.html /etc/skel/Tor\ Browser/")
 
+def border_wallets():
+    subprocess.run("wget -O shared_with_chroot/borderwallet.html https://github.com/microchad/borderwallets/releases/download/1.0.5/borderwallets.html", shell=True)
+    subprocess.run("cp dotfiles/dotdesktop/borderwallet.desktop shared_with_chroot/", shell=True)
+    add_script_config("\nmkdir /etc/skel/Tor\ Browser/")
+    add_script_config("\nmkdir /opt/logos/")
+    subprocess.run("cp dotfiles/logos/borderwallet.svg shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/borderwallet.svg /opt/logos/")
+    add_script_config("\ncp /tmp/borderwallet.desktop /usr/share/applications/")
+    add_script_config("\ncp /tmp/borderwallet.html /etc/skel/Tor\ Browser/")
 
 def hodl_hodl_and_robosats():
     subprocess.run("cp dotfiles/dotdesktop/robosats.desktop shared_with_chroot/", shell=True)
