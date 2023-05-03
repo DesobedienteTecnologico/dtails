@@ -114,7 +114,11 @@ class MyApp(tk.Tk):
             devices = context.list_devices(subsystem='block', ID_BUS='usb')
             self.pendrives = {}
             for device in devices:
-                self.pendrives[device.get('ID_VENDOR')] = device.device_node[:-1]
+                if not device.get('ID_VENDOR'):
+                    print_yellow("No USB Manufacturer found on internal database... Using idVendor instead.")
+                    self.pendrives[device.get('ID_VENDOR_ID')] = device.device_node[:-1]
+                else:
+                    self.pendrives[device.get('ID_VENDOR')] = device.device_node[:-1]
             if self.pendrives:
                 #self.pendrive_var.set(list(self.pendrives)[0])
                 if self.pendrive_var.get() == "":
