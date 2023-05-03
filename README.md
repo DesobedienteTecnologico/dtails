@@ -22,7 +22,7 @@
 
 # ℹ️ About
 
-DTails is a tool to add software in Debian based live images like Tails. DTails is not a distribution.
+DTails is a tool that helps to add software in Debian based live images like Tails. DTails is not a distribution.
 
 ## 📦 Packages requirements
 
@@ -47,19 +47,19 @@ sudo ./dtails.py
 #### Why sudo?
 Sudo is needed to mount the <b>.iso / .img</b> into a directory, as well to use other software. Without it, we can't use those GNU/Linux tools.
 
-### 1. 💿 Select the Tails .iso
+### 1. 💿 Select the Tails image
 
-<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/232882119-ad271dae-8931-43df-8728-963bede05d3a.png" width="400"/>
+<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/236019250-538e9353-053d-446e-ac89-c01fe824d51f.png" width="400"/>
 
 ### 2. 📥 / 📤 Add or remove packages
  1. Click on the checkboxes to add (Left) or remove (Right) the software you like.
  2. Click on "Build" once you are ready to build your image.
 
-<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/232882410-0987ad34-d27e-453d-9fd7-1dfd04ef2843.png" width="400"/>
+<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/236018996-e0e887e5-cae2-4c27-9621-2694b40b572d.png" width="400"/>
 
 You can keep track in that is happening in your terminal.
 
-<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/232882809-a968ec60-af05-4b01-9efd-be49760d76e2.png" width="800"/>
+<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/232882809-a968ec60-af05-4b01-9efd-be49760d76e2.png" width="700"/>
 
 
 ### 3. 💽 .iso vs .img
@@ -74,8 +74,25 @@ Connect your flash drive and choose the right one. (Double check it once you sel
 
 <img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/232884954-36c62ea0-ac76-41a6-b6cc-6710ac90198b.png" width="400"/>
 
+---
+## 📦 List of software
+
+To install  | To remove |
+:----- | :----: |
+Sparrow Wallet    | Thunderbird |
+Bisq   | GIMP  |
+BIP39 iancoleman
+SeedTool
+Border Wallets
+Hodl Hodl and RoboSats
+Mempool.space
+Briar
+Nostr web clients (Snort & Iris)
 
 
-## DEMO
-<img alt="Dtails" src="img/demo.gif" width="400"/>
+---
+
+## **Video Spanish & English**
+
+<a href="https://www.youtube.com/watch?v=QABz-GOeQ68"><img alt="Dtails" src="https://img.youtube.com/vi/QABz-GOeQ68/0.jpg" width="400"/></a>
 
