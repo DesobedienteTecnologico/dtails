@@ -1,0 +1,13 @@
+[Desktop Entry]
+Comment=Simple Bitcoin wallet that features a timelocked recovery path for all your coins
+Exec=/opt/liana/liana-gui
+GenericName[en_US]=Liana Bitcoin Wallet
+GenericName=Liana Bitcoin Wallet
+Icon=/opt/liana/liana.svg
+Name[en_US]=Liana Bitcoin Wallet
+Name=Liana Bitcoin Wallet
+Categories=Finance;Network;
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/bitcoin;

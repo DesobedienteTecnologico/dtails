@@ -71,6 +71,7 @@ class MyApp(tk.Tk):
         left_text.pack(pady=5)
 
         self.create_checkbox(left_frame, "Sparrow Wallet (106MB)", "")
+        self.create_checkbox(left_frame, "Liana Wallet (13.8MB)", "")
         self.create_checkbox(left_frame, "Bisq (222MB)", "")
         self.create_checkbox(left_frame, "BIP39 iancoleman (4.34MB)", "")
         self.create_checkbox(left_frame, "SeedTool (6.58MB)", "")
