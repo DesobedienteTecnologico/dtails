@@ -7,7 +7,7 @@ from src.apps import *
 
 ################## START Functions to unpack and pack the final image ##################
 def iso_work(iso):
-    print_green("\nModifying the .iso and adding the new configurations...")
+    print_green("\nModifying the image and adding the new configurations...")
     
     # Create directories needed to work on
     subprocess.run("mkdir iso_mounted future_iso", shell=True) 
@@ -32,6 +32,7 @@ def iso_work(iso):
     # Mount from Host to Chroot to get chroot working fine
     subprocess.run("sudo mount --bind /run/ system_to_edit/run", shell=True)
     subprocess.run("sudo mount --bind /dev/ system_to_edit/dev", shell=True)
+    subprocess.run("sudo mount --bind /proc/ system_to_edit/proc", shell=True)
 
     # Mount shared_with_chroot. This will allow us to exchange data to/from chroot
     subprocess.run("sudo mount --bind shared_with_chroot system_to_edit/tmp", shell=True)
@@ -69,6 +70,7 @@ def ending_chroot_and_cleaning_up():
 def build_iso(img):
     print_yellow("\n\nGetting -unrecognize xattr prefix system.posix_acl_access- message. IS NOT AN ISSUE.\nThat happen because we are running it by scripts.\nThat is kind of know bug :) \n\n")
     # Make squashfs
+    subprocess.run("sudo umount system_to_edit/proc", shell=True)
     subprocess.run("sudo mksquashfs system_to_edit/ filesystem.squashfs", shell=True)
     subprocess.run("mv filesystem.squashfs future_iso/live/", shell=True)
     # Build the .iso

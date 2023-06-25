@@ -15,6 +15,7 @@
         <Filename>bip39ian.desktop</Filename>
         <Filename>seedtool.desktop</Filename>
         <Filename>borderwallet.desktop</Filename>
+        <Filename>whirlpool-gui.desktop</Filename>
     </Include>
   </Menu>
 </Menu>

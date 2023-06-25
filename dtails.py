@@ -75,6 +75,7 @@ class MyApp(tk.Tk):
         self.create_checkbox(left_frame, "BIP39 iancoleman (4.34MB)", "")
         self.create_checkbox(left_frame, "SeedTool (6.58MB)", "")
         self.create_checkbox(left_frame, "Border Wallets (1.59MB)", "")
+        self.create_checkbox(left_frame, "Whirlpool GUI (327MB)", "")
         self.create_checkbox(left_frame, "Hodl Hodl and RoboSats (~1MB)", "")
         self.create_checkbox(left_frame, "Mempool.space (~1MB)", "")
         self.create_checkbox(left_frame, "Briar (221MB)", "")
