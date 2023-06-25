@@ -9,6 +9,8 @@ sparrow_v = sparrow_url.split("/")[1]
 bisq_url = "v1.9.10/Bisq-64bit-1.9.10"
 bisq_v = bisq_url.split("/")[1]
 briar_v = "briar-desktop-debian-bullseye"
+whirlpool_url = "fda2da816431c25598f532486ac0da09/whirlpool-gui_0.10.3_amd64"
+whirlpool_v = whirlpool_url.split("/")[1]
 
 ################## Print functions ##################
 def print_green(text):
@@ -135,6 +137,32 @@ def mempool_space():
     subprocess.run("cp dotfiles/logos/mempool_space.png shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/mempool_space.png /opt/logos/")
 
+def whirlpool_gui():
+    print_green("Downloading...")
+    subprocess.run("wget https://code.samourai.io/whirlpool/whirlpool-gui/uploads/"+ whirlpool_url +".deb -P shared_with_chroot", shell=True)
+    print_yellow("Chroot connecting to the internet to download openjdk...")
+    subprocess.run("chmod 777 shared_with_chroot", shell=True)
+    add_script_config("\necho 'nameserver 1.1.1.1' > /etc/resolv.conf")
+    add_script_config("\necho 'deb http://security.debian.org/debian-security bullseye-security main' >> /etc/apt/sources.list")
+    add_script_config("\necho 'deb http://ftp.de.debian.org/debian bullseye main' >> /etc/apt/sources.list")
+    add_script_config("\nsed -i 's/^/#/' /etc/apt/apt.conf.d/80tails-additional-software")
+    add_script_config("\nsed -i 's/^/#/' /etc/apt/apt.conf.d/70debconf")
+    add_script_config("\napt update ; apt install -y openjdk-17-jdk")
+    add_script_config("\ndpkg -i /tmp/"+ whirlpool_v +".deb")
+    subprocess.run("cp dotfiles/dotconf/ferm.conf shared_with_chroot/", shell=True)
+    subprocess.run("cp dotfiles/dotconf/9000-hosts-file-samourai shared_with_chroot/9000-hosts-file", shell=True)
+    add_script_config("\nmv /tmp/9000-hosts-file /lib/live/config/")
+    add_script_config("\nmv /tmp/ferm.conf /etc/ferm/ferm.conf")
+
+    # Tails config files as default
+    add_script_config("\necho "" > /etc/resolv.conf")
+    add_script_config("\nsed -i 's/^#//' /etc/apt/apt.conf.d/80tails-additional-software")
+    add_script_config("\nsed -i 's/^#//' /etc/apt/apt.conf.d/70debconf")
+    add_script_config("\nhead -n -2 /etc/apt/sources.list > /etc/apt/sources.list")
+
+    # Cleaning logs and unnecessary Java certificates
+    add_script_config("\nrm -rf /var/log/apt/term.log /var/log/alternatives.log /var/cache/man/* /var/cache/apt/pkgcache.bin /etc/ssl/certs/java")
+    add_script_config("\necho '' | tee /var/log/dpkg.log | tee /var/log/apt/history.log")
 ################## Remove packages ##################
 def thunderbird():
     add_script_config("\ndpkg -r --force-depends thunderbird")
