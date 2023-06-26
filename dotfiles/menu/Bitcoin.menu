@@ -7,6 +7,7 @@
     <Directory>Bitcoin.directory</Directory>
     <Include>
         <Filename>sparrow.desktop</Filename>
+        <Filename>liana.desktop</Filename>
         <Filename>electrum.desktop</Filename>
         <Filename>bisq-Bisq.desktop</Filename>       
         <Filename>mempool_space.desktop</Filename>
