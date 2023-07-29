@@ -11,6 +11,10 @@ bisq_v = bisq_url.split("/")[1]
 briar_v = "briar-desktop-debian-bullseye"
 whirlpool_url = "fda2da816431c25598f532486ac0da09/whirlpool-gui_0.10.3_amd64"
 whirlpool_v = whirlpool_url.split("/")[1]
+specter_url = "v2.0.1/specter_desktop-v2.0.1-x86_64-linux-gnu"
+specter_v = specter_url.split("/")[1]
+specterd_url = specter_url.replace("specter_desktop","specterd")
+specterd_v = specterd_url.split("/")[1]
 
 ################## Print functions ##################
 def print_green(text):
@@ -163,6 +167,29 @@ def whirlpool_gui():
     # Cleaning logs and unnecessary Java certificates
     add_script_config("\nrm -rf /var/log/apt/term.log /var/log/alternatives.log /var/cache/man/* /var/cache/apt/pkgcache.bin /etc/ssl/certs/java")
     add_script_config("\necho '' | tee /var/log/dpkg.log | tee /var/log/apt/history.log")
+
+def specter_desktop():
+    print_green("Downloading specter-desktop...")
+    subprocess.run("wget https://github.com/cryptoadvance/specter-desktop/releases/download/"+ specter_url +".tar.gz -P shared_with_chroot", shell=True)
+    #subprocess.run("sudo tar -zxvf shared_with_chroot/"+ specter_v +".tar.gz Specter-*.AppImage -C shared_with_chroot/", shell=True)
+    add_script_config("\ncd /tmp/ ; tar -zxvf "+ specter_v +".tar.gz --wildcards *.AppImage")
+    add_script_config("\nmkdir /opt/specter/")
+    subprocess.run("wget -O shared_with_chroot/specter_logo.png https://raw.githubusercontent.com/cryptoadvance/specter-desktop/72fed92dd5d00e3164adcc97decf5ae03328538a/src/cryptoadvance/specter/static/img/v1-icons/icon.png", shell=True)
+    add_script_config("\ncp /tmp/specter_logo.png /opt/specter/logo.png")
+    add_script_config("\ncp /tmp/Specter-*.AppImage /opt/specter/Specter.AppImage")
+    add_script_config("\ncp /tmp/udev/*.rules /etc/udev/rules.d/")
+    print_green("Downloading specterd...")
+    subprocess.run("wget https://github.com/cryptoadvance/specter-desktop/releases/download/"+ specterd_url +".zip -P shared_with_chroot", shell=True)
+    add_script_config("\nmkdir -p /etc/skel/.specter/specterd-binaries/")
+    subprocess.run("sudo unzip shared_with_chroot/"+ specterd_v +".zip -d shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/specterd /etc/skel/.specter/specterd-binaries/")
+    add_script_config("\nmkdir /etc/skel/.fonts/")
+    subprocess.run("wget -O shared_with_chroot/NotoColorEmoji.ttf https://raw.githubusercontent.com/googlefonts/noto-emoji/main/fonts/NotoColorEmoji.ttf", shell=True)
+    add_script_config("\ncp /tmp/NotoColorEmoji.ttf /etc/skel/.fonts/NotoColorEmoji.ttf")
+    subprocess.run("cp dotfiles/dotconf/ferm_specter.conf shared_with_chroot/", shell=True)
+    add_script_config("\nmv /tmp/ferm_specter.conf /etc/ferm/ferm.conf")
+    subprocess.run("cp dotfiles/dotdesktop/specter.desktop shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/specter.desktop /usr/share/applications/")
 ################## Remove packages ##################
 def thunderbird():
     add_script_config("\ndpkg -r --force-depends thunderbird")

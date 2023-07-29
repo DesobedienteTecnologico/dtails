@@ -85,6 +85,7 @@ BIP39 iancoleman
 SeedTool
 Border Wallets
 Whirlpool GUI
+Specter Desktop
 Hodl Hodl and RoboSats
 Mempool.space
 Briar
