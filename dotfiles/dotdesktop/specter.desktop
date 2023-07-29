@@ -1,0 +1,11 @@
+[Desktop Entry]
+Comment=A specter is haunting the modern world, the specter of crypto anarchy
+Exec=/opt/specter/./Specter.AppImage
+GenericName=Specter Bitcoin Wallet
+Icon=/opt/specter/logo.png
+Name=Specter Bitcoin Wallet
+Categories=Finance;Network;
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/bitcoin;
