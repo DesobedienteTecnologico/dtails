@@ -6,7 +6,7 @@ from src.commands import *
 # Variables
 sparrow_url = "1.7.8/sparrow-1.7.8-x86_64"
 sparrow_v = sparrow_url.split("/")[1]
-bisq_url = "v1.9.10/Bisq-64bit-1.9.10"
+bisq_url = "v1.9.12/Bisq-64bit-1.9.12"
 bisq_v = bisq_url.split("/")[1]
 briar_v = "briar-desktop-debian-bullseye"
 whirlpool_url = "fda2da816431c25598f532486ac0da09/whirlpool-gui_0.10.3_amd64"
