@@ -17,6 +17,7 @@
         <Filename>borderwallet.desktop</Filename>
         <Filename>whirlpool-gui.desktop</Filename>
         <Filename>specter.desktop</Filename>
+        <Filename>io.mycitadel.Wallet.desktop</Filename>
     </Include>
   </Menu>
 </Menu>
