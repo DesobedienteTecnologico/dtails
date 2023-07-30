@@ -77,6 +77,7 @@ class MyApp(tk.Tk):
         self.create_checkbox(left_frame, "Border Wallets (1.59MB)", "")
         self.create_checkbox(left_frame, "Whirlpool GUI (327MB)", "")
         self.create_checkbox(left_frame, "Specter Desktop (197MB)", "")
+        self.create_checkbox(left_frame, "MyCitadel Desktop (4.41MB)", "")
         self.create_checkbox(left_frame, "Hodl Hodl and RoboSats (~1MB)", "")
         self.create_checkbox(left_frame, "Mempool.space (~1MB)", "")
         self.create_checkbox(left_frame, "Briar (221MB)", "")
