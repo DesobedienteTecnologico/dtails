@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name= Rana
+GenericName=Rana mining tool
+Comment= Nostr public key mining tool
+Exec=gnome-terminal -- bash -c "/opt/rana/./rana --help; exec bash"
+Icon=/opt/rana/rana.png
+Terminal=true
+Type=Application
+Categories=Nostr;
+Keywords=Nostr
+StartupNotify=true

@@ -8,6 +8,7 @@
     <Include>
         <Filename>snort.desktop</Filename>
         <Filename>iris_to.desktop</Filename>       
+        <Filename>rana.desktop</Filename>
     </Include>
   </Menu>
 </Menu>
