@@ -17,6 +17,7 @@ specterd_url = specter_url.replace("specter_desktop","specterd")
 specterd_v = specterd_url.split("/")[1]
 mycitadel_url = "v1.4.0/mycitadel_1.4.0-1_debian11_amd64"
 mycitadel_v = mycitadel_url.split("/")[1]
+rana_v = "v0.5.4"
 
 ################## Print functions ##################
 def print_green(text):
@@ -198,6 +199,17 @@ def mycitadel_desktop():
     add_script_config("\ndpkg -i /tmp/"+ mycitadel_v +".deb")
     subprocess.run("cp dotfiles/dotdesktop/io.mycitadel.Wallet.desktop shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/io.mycitadel.Wallet.desktop /usr/share/applications/")
+
+def rana_nostr_pubkeys_mining_tool():
+    subprocess.run("wget -O shared_with_chroot/rana.tar.gz https://github.com/grunch/rana/releases/download/"+ rana_v +"/rana-x86_64-unknown-linux-musl.tar.gz", shell=True)
+    add_script_config("\nmkdir -p /opt/rana/")
+    add_script_config("\ntar xvf /tmp/rana.tar.gz -C /opt/rana/ --strip-components=1")
+    subprocess.run("cp dotfiles/dotdesktop/rana.desktop shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/rana.desktop /usr/share/applications/")
+    subprocess.run("cp dotfiles/logos/rana.png shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/rana.png /opt/rana/")
+    add_script_config("\nln -s /opt/rana/rana /usr/bin")
+
 
 
 ################## Remove packages ##################
