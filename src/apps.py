@@ -15,6 +15,8 @@ specter_url = "v2.0.1/specter_desktop-v2.0.1-x86_64-linux-gnu"
 specter_v = specter_url.split("/")[1]
 specterd_url = specter_url.replace("specter_desktop","specterd")
 specterd_v = specterd_url.split("/")[1]
+mycitadel_url = "v1.4.0/mycitadel_1.4.0-1_debian11_amd64"
+mycitadel_v = mycitadel_url.split("/")[1]
 
 ################## Print functions ##################
 def print_green(text):
@@ -190,6 +192,14 @@ def specter_desktop():
     add_script_config("\nmv /tmp/ferm_specter.conf /etc/ferm/ferm.conf")
     subprocess.run("cp dotfiles/dotdesktop/specter.desktop shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/specter.desktop /usr/share/applications/")
+
+def mycitadel_desktop():
+    subprocess.run("wget https://github.com/mycitadel/mycitadel-desktop/releases/download/"+ mycitadel_url +".deb -P shared_with_chroot", shell=True)
+    add_script_config("\ndpkg -i /tmp/"+ mycitadel_v +".deb")
+    subprocess.run("cp dotfiles/dotdesktop/io.mycitadel.Wallet.desktop shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/io.mycitadel.Wallet.desktop /usr/share/applications/")
+
+
 ################## Remove packages ##################
 def thunderbird():
     add_script_config("\ndpkg -r --force-depends thunderbird")

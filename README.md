@@ -86,6 +86,7 @@ SeedTool
 Border Wallets
 Whirlpool GUI
 Specter Desktop
+MyCitadel Desktop
 Hodl Hodl and RoboSats
 Mempool.space
 Briar
