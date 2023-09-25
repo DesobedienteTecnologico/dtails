@@ -15,7 +15,7 @@ specter_url = "v2.0.2/specter_desktop-v2.0.2-x86_64-linux-gnu"
 specter_v = specter_url.split("/")[1]
 specterd_url = specter_url.replace("specter_desktop","specterd")
 specterd_v = specterd_url.split("/")[1]
-mycitadel_url = "v1.4.0/mycitadel_1.4.0-1_debian11_amd64"
+mycitadel_url = "v1.5.0/mycitadel_1.5.0-1_debian11_amd64"
 mycitadel_v = mycitadel_url.split("/")[1]
 rana_v = "v0.5.4"
 
