@@ -84,7 +84,7 @@ Bisq   | GIMP  |
 BIP39 iancoleman
 SeedTool
 Border Wallets
-Whirlpool GUI
+Whirlpool GUI [🌐](https://github.com/DesobedienteTecnologico/dtails/pull/15)
 Specter Desktop
 MyCitadel Desktop
 Hodl Hodl and RoboSats
@@ -92,6 +92,7 @@ Mempool.space
 Briar
 Nostr web clients (Snort & Iris)
 
+*🌐 Chroot connects to internet to download packages
 
 ---
 
