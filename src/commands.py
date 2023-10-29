@@ -2,7 +2,6 @@ import sys
 import subprocess
 import os
 import re
-import dtails
 from src.apps import *
 
 ################## START Functions to unpack and pack the final image ##################
@@ -64,7 +63,6 @@ def ending_chroot_and_cleaning_up():
     print_green("Done!\nimage umounted.")
 
 ################## END Functions to unpack and pack the .iso ##################
-
 ################## START Function to build the .iso ##################
 
 def build_iso(img):
