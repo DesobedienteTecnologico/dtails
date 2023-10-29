@@ -5,22 +5,6 @@ from src.commands import *
 from src.installer import *
 
 
-# Variables
-bisq_url = "v1.9.12/Bisq-64bit-1.9.12"
-bisq_v = bisq_url.split("/")[1]
-briar_v = "briar-desktop-debian-bullseye"
-mycitadel_url = "v1.5.0/mycitadel_1.5.0-1_debian11_amd64"
-mycitadel_v = mycitadel_url.split("/")[1]
-rana_v = "v0.5.4"
-sparrow_url = "1.7.9/sparrow-1.7.9-x86_64"
-sparrow_v = sparrow_url.split("/")[1]
-specter_url = "v2.0.2/specter_desktop-v2.0.2-x86_64-linux-gnu"
-specter_v = specter_url.split("/")[1]
-specterd_url = specter_url.replace("specter_desktop","specterd")
-specterd_v = specterd_url.split("/")[1]
-whirlpool_url = "fda2da816431c25598f532486ac0da09/whirlpool-gui_0.10.3_amd64"
-whirlpool_v = whirlpool_url.split("/")[1]
-
 ################## Print color functions ##################
 def print_green(text):
     color_start = "\033[0;32m"
@@ -73,6 +57,15 @@ def briar():
     else:
         subprocess.run("wget https://desktop.briarproject.org/debs/bullseye/"+ briar_v +".deb -P shared_with_chroot", shell=True)
         install_briar()
+
+def simplex_chat():
+    file = simplex_v +".deb"
+    if os.path.exists("shared_with_chroot/"+ file):
+        print_yellow(f"{file} already created. Skipping...\n")
+        install_bisq()
+    else:
+        subprocess.run("wget https://github.com/simplex-chat/simplex-chat/releases/download/"+ simplex_url +".deb -P shared_with_chroot", shell=True)
+        install_simplex()
 
 def bip39_iancoleman():
     file = "bip39-standalone.html"

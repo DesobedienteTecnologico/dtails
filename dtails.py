@@ -81,6 +81,7 @@ class MyApp(tk.Tk):
         self.create_checkbox(left_frame, "Hodl Hodl and RoboSats (~1MB)", "")
         self.create_checkbox(left_frame, "Mempool.space (~1MB)", "")
         self.create_checkbox(left_frame, "Briar (221MB)", "")
+        self.create_checkbox(left_frame, "SimpleX Chat (249MB)", "")
         self.create_checkbox(left_frame, "Rana Nostr pubkeys mining tool (1.46MB)", "")
         self.create_checkbox(left_frame, "Nostr web clients (~1MB)", "gobbler")
 

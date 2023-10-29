@@ -4,6 +4,25 @@ import os
 from src.commands import *
 from src.apps import *
 
+# Variables
+bisq_url = "v1.9.12/Bisq-64bit-1.9.12"
+bisq_v = bisq_url.split("/")[1]
+briar_v = "briar-desktop-debian-bullseye"
+simplex_url = "v5.3.2/simplex-desktop-ubuntu-20_04-x86_64"
+simplex_v = simplex_url.split("/")[1]
+mycitadel_url = "v1.5.0/mycitadel_1.5.0-1_debian11_amd64"
+mycitadel_v = mycitadel_url.split("/")[1]
+rana_v = "v0.5.4"
+sparrow_url = "1.7.9/sparrow-1.7.9-x86_64"
+sparrow_v = sparrow_url.split("/")[1]
+specter_url = "v2.0.2/specter_desktop-v2.0.2-x86_64-linux-gnu"
+specter_v = specter_url.split("/")[1]
+specterd_url = specter_url.replace("specter_desktop","specterd")
+specterd_v = specterd_url.split("/")[1]
+whirlpool_url = "fda2da816431c25598f532486ac0da09/whirlpool-gui_0.10.3_amd64"
+whirlpool_v = whirlpool_url.split("/")[1]
+
+
 ############################################
 
 def add_script_config(text):
@@ -41,6 +60,8 @@ def install_bisq():
 def install_briar():
     add_script_config("\ndpkg -i /tmp/"+ briar_v +".deb")
 
+def install_simplex():
+    add_script_config("\ndpkg -i /tmp/"+ simplex_v +".deb")
 
 def install_bip39_iancoleman():
     subprocess.run("cp dotfiles/dotdesktop/bip39ian.desktop shared_with_chroot/", shell=True)
