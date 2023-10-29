@@ -55,7 +55,7 @@ Sudo is needed to mount the <b>.iso / .img</b> into a directory, as well to use 
  1. Click on the checkboxes to add (Left) or remove (Right) the software you like.
  2. Click on "Build" once you are ready to build your image.
 
-<img alt="Dtails" src="https://user-images.githubusercontent.com/52879067/236018996-e0e887e5-cae2-4c27-9621-2694b40b572d.png" width="400"/>
+<img alt="Dtails" src="https://github.com/DesobedienteTecnologico/dtails/assets/52879067/2a1177c6-3306-4c84-ae85-62b0989b739f" width="450"/>
 
 You can keep track in that is happening in your terminal.
 
@@ -90,6 +90,8 @@ MyCitadel Desktop
 Hodl Hodl and RoboSats
 Mempool.space
 Briar
+SimpleX Chat
+Rana Nostr Pubkeys mining tool
 Nostr web clients (Snort & Iris)
 
 *🌐 Chroot connects to internet to download packages
