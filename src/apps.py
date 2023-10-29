@@ -8,6 +8,8 @@ from src.installer import *
 # Variables
 bisq_url = "v1.9.12/Bisq-64bit-1.9.12"
 bisq_v = bisq_url.split("/")[1]
+liana_url = "v0.4/liana-0.4-x86_64-linux-gnu"
+liana_v = liana_url.split("/")[1]
 briar_v = "briar-desktop-debian-bullseye"
 mycitadel_url = "v1.5.0/mycitadel_1.5.0-1_debian11_amd64"
 mycitadel_v = mycitadel_url.split("/")[1]
@@ -55,6 +57,22 @@ def sparrow_wallet():
         print_green("Downloading...")
         subprocess.run("wget https://github.com/sparrowwallet/sparrow/releases/download/"+ sparrow_url +".tar.gz -P shared_with_chroot", shell=True)
         install_sparrow()
+
+def liana_wallet():
+    file = sparrow_v +".tar.gz"
+    if os.path.exists("shared_with_chroot/"+ liana_v +".tar.gz"):
+        print_yellow(f"{file} already created. Skipping...\n")
+        add_script_config("\ntar -xvf /tmp/"+ liana_v +".tar.gz -C /opt")
+        subprocess.run("cp dotfiles/dotdesktop/liana.desktop shared_with_chroot/", shell=True)
+        add_script_config("\ncp /tmp/liana.desktop /usr/share/applications/")
+    else:
+        print_green("Downloading...")
+        subprocess.run("wget https://github.com/wizardsardine/liana/releases/download/"+ liana_url +".tar.gz -P shared_with_chroot", shell=True)
+        add_script_config("\nmkdir /opt/liana/ && tar -xvf /tmp/"+ liana_v +".tar.gz -C /opt/liana/ --strip-components 1")
+        subprocess.run("cp dotfiles/logos/liana.svg shared_with_chroot/", shell=True)
+        add_script_config("\ncp /tmp/liana.svg /opt/liana/")
+        subprocess.run("cp dotfiles/dotdesktop/liana.desktop shared_with_chroot/", shell=True)
+        add_script_config("\ncp /tmp/liana.desktop /usr/share/applications/")
 
 def bisq():
     file = bisq_v +".deb"
