@@ -21,7 +21,8 @@ specterd_url = specter_url.replace("specter_desktop","specterd")
 specterd_v = specterd_url.split("/")[1]
 whirlpool_url = "fda2da816431c25598f532486ac0da09/whirlpool-gui_0.10.3_amd64"
 whirlpool_v = whirlpool_url.split("/")[1]
-
+bitcoincore_url = "bitcoin-core-25.1/bitcoin-25.1-x86_64-linux-gnu"
+bitcoincore_v = bitcoincore_url.split("/")[1]
 
 ############################################
 
@@ -147,3 +148,10 @@ def install_rana_nostr_pubkeys_mining_tool():
     subprocess.run("cp dotfiles/logos/rana.png shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/rana.png /opt/rana/")
     add_script_config("\nln -s /opt/rana/rana /usr/bin")
+
+def install_bitcoincore():
+    add_script_config("\nmkdir -p /opt/bitcoin/")
+    add_script_config("\ncp /tmp/bitcoin256.png /opt/bitcoin/bitcoin256.png")
+    add_script_config("\ntar xzf /tmp/"+ bitcoincore_v +".tar.gz -C /opt/bitcoin --strip-components=1")
+    subprocess.run("cp dotfiles/dotdesktop/bitcoincore.desktop shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/bitcoincore.desktop /usr/share/applications/")

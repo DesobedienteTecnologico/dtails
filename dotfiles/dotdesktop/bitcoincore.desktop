@@ -1,0 +1,13 @@
+[Desktop Entry]
+Comment=Official Bitcoin Core
+Exec=/opt/bitcoin/bin/./bitcoin-qt
+GenericName[en_US]=Bitcoin Full Node
+GenericName=Bitcoin Full Node
+Icon=/opt/bitcoin/bitcoin256.png
+Name[en_US]=Bitcoin Core
+Name=Bitcoin Core
+Categories=Finance;Network;
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/bitcoin;

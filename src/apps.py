@@ -155,6 +155,16 @@ def mempool_space():
     subprocess.run("cp dotfiles/logos/mempool_space.png shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/mempool_space.png /opt/logos/")
 
+def bitcoin_core():
+    file = bitcoincore_v +".tar.gz"
+    if os.path.exists("shared_with_chroot/"+ file):
+        print_yellow(f"{file} already created. Skipping...\n")
+        install_bitcoincore()
+    else:
+        print_green("Downloading...")
+        subprocess.run("wget https://bitcoincore.org/bin/"+ bitcoincore_url +".tar.gz https://raw.githubusercontent.com/bitcoin/bitcoin/master/share/pixmaps/bitcoin256.png -P shared_with_chroot", shell=True)
+        install_bitcoincore()
+
 ################## END functions to install packages ##################
 ################## START functions to remove packages ##################
 def thunderbird():

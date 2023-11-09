@@ -18,6 +18,7 @@
         <Filename>whirlpool-gui.desktop</Filename>
         <Filename>specter.desktop</Filename>
         <Filename>io.mycitadel.Wallet.desktop</Filename>
+        <Filename>bitcoincore.desktop</Filename>
     </Include>
   </Menu>
 </Menu>
