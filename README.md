@@ -87,6 +87,7 @@ Border Wallets
 Whirlpool GUI [🌐](https://github.com/DesobedienteTecnologico/dtails/pull/15)
 Specter Desktop
 MyCitadel Desktop
+Bitcoin Core
 Hodl Hodl and RoboSats
 Mempool.space
 Briar
