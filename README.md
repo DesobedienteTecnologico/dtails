@@ -4,19 +4,22 @@
 <h1 align="center">DTails</h1>
 
 <p align="center">
-  <a href="https://opensource.org/licenses/MIT" title="License: MIT">
+  <a href="https://opensource.org/license/gpl-3-0/" title="License: GPLv3">
     <img src="https://img.shields.io/badge/License-GPLv3-red">
   </a>
-  <a href="https://twitter.com/DesobedienteTec" title="Twitter">
-  <img src="https://img.shields.io/twitter/follow/DesobedienteTecnologico?style=social">
+  <a href="https://nostr.com/npub1dtmp3wrkyqafghjgwyk88mxvulfncc9lg6ppv4laet5cun66jtwqqpgte6" title="Nostr">
+  <img src="https://img.shields.io/badge/%E2%9C%89%EF%B8%8F-Nostr-purple">
   </a>
-  <a href="lnurlp:dt@getalby.com" title="Lightning">
-  <img src="https://img.shields.io/badge/%E2%9A%A1-dt%40getalby.com-orange">
+<a href="https://t.me/DesobedientesTecnologicos" title="Telegram">
+  <img src="https://img.shields.io/badge/📨-Telegram-blue">
+  </a>
+  <a href="https://twitter.com/DesobedienteTec" title="Twitter">
+  <img src="https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FDesobedienteTec&label=Follow">
   </a>
   <a href="http://btcpay.desobedientetecnologico.com/" title="Bitcoin / BIP47">
-  <img src="https://img.shields.io/badge/%20%F0%9F%A5%B7-btcpay.desobedientetecnologico.com-yellow?logo=bitcoin">
+  <img src="https://img.shields.io/badge/⚡️-btcpay-yellow?logo=bitcoin">
   </a>
-  
+
 </p>
 
 
