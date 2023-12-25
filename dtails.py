@@ -83,8 +83,9 @@ class MyApp(tk.Tk):
         self.create_checkbox(left_frame, "Briar (221MB)", "")
         self.create_checkbox(left_frame, "SimpleX Chat (249MB)", "")
         self.create_checkbox(left_frame, "Rana Nostr pubkeys mining tool (1.46MB)", "")
-        self.create_checkbox(left_frame, "Nostr web clients (~1MB)", "")
-        self.create_checkbox(left_frame, "Bitcoin Core (45MB)", "gobbler")
+        self.create_checkbox(left_frame, "Nostr web clients (~1MB)", "gobbler")
+        self.create_checkbox(left_frame, "Bitcoin Core (45MB)", "")
+        self.create_checkbox(left_frame, "Feather Wallet (22MB)", "")
 
         right_text = tk.Label(right_frame, text="Remove software", font="bold")
         right_text.pack(pady=5)

@@ -165,6 +165,17 @@ def bitcoin_core():
         subprocess.run("wget https://bitcoincore.org/bin/"+ bitcoincore_url +".tar.gz https://raw.githubusercontent.com/bitcoin/bitcoin/master/share/pixmaps/bitcoin256.png -P shared_with_chroot", shell=True)
         install_bitcoincore()
 
+def feather_wallet():
+    file = feather_v +".AppImage"
+    if os.path.exists("shared_with_chroot/"+ file):
+        print_yellow(f"{file} already created. Skipping...\n")
+        install_feather()
+    else:
+        print_green("Downloading...")
+        subprocess.run("wget https://featherwallet.org/files/releases/linux-appimage-a/"+ feather_v +".AppImage https://featherwallet.org/img/feather.png -P shared_with_chroot", shell=True)
+        install_feather()
+
+
 ################## END functions to install packages ##################
 ################## START functions to remove packages ##################
 def thunderbird():

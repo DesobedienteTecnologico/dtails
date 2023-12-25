@@ -1,0 +1,12 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+ "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+<Menu>
+  <Name>Applications</Name>
+  <Menu>
+    <Name>Monero</Name>
+    <Directory>Monero.directory</Directory>
+    <Include>
+        <Filename>featherwallet.desktop</Filename>
+    </Include>
+  </Menu>
+</Menu>
