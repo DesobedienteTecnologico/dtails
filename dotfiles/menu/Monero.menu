@@ -7,6 +7,7 @@
     <Directory>Monero.directory</Directory>
     <Include>
         <Filename>featherwallet.desktop</Filename>
+        <Filename>cakewallet.desktop</Filename>
     </Include>
   </Menu>
 </Menu>

@@ -24,6 +24,7 @@ whirlpool_v = whirlpool_url.split("/")[1]
 bitcoincore_url = "bitcoin-core-26.0/bitcoin-26.0-x86_64-linux-gnu"
 bitcoincore_v = bitcoincore_url.split("/")[1]
 feather_v = "feather-2.6.1-a"
+cake_v = "v4.12.1"
 
 ############################################
 
@@ -166,4 +167,10 @@ def install_feather():
     subprocess.run("cp dotfiles/dotdesktop/featherwallet.desktop shared_with_chroot/", shell=True)
     add_script_config("\nchmod +x /opt/feather/feather.AppImage")
     add_script_config("\ncp /tmp/featherwallet.desktop /usr/share/applications/")
+
+def install_cake():
+    add_script_config("\nmkdir -p /opt/cakewallet/")
+    add_script_config("\ntar xf /tmp/cake.tar.xz -C /opt/cakewallet --strip-components=1")
+    subprocess.run("cp dotfiles/dotdesktop/cakewallet.desktop shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/cakewallet.desktop /usr/share/applications/")
 

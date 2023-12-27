@@ -175,6 +175,16 @@ def feather_wallet():
         subprocess.run("wget https://featherwallet.org/files/releases/linux-appimage-a/"+ feather_v +".AppImage https://featherwallet.org/img/feather.png -P shared_with_chroot", shell=True)
         install_feather()
 
+def cake_wallet():
+    file = cake_v +".tar.xz"
+    if os.path.exists("shared_with_chroot/"+ file):
+        print_yellow(f"{file} already created. Skipping...\n")
+        install_cake()
+    else:
+        print_green("Downloading...")
+        subprocess.run("wget -O shared_with_chroot/cake.tar.xz https://github.com/cake-tech/cake_wallet/releases/download/"+ cake_v +"/Cake_Wallet_"+ cake_v +"_Linux.tar.xz", shell=True)
+        install_cake()
+
 
 ################## END functions to install packages ##################
 ################## START functions to remove packages ##################

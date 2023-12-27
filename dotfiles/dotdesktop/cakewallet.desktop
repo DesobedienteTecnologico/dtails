@@ -1,0 +1,11 @@
+[Desktop Entry]
+Comment=A noncustodial multi-currency wallet
+Exec=/opt/cakewallet/cake_wallet
+GenericName=CakeWallet
+Icon=/opt/cakewallet/data/flutter_assets/assets/images/cakewallet_logo.png
+Name=CakeWallet
+Categories=Finance;Network;Monero;Bitcoin;
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/Monero;
