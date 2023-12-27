@@ -97,6 +97,8 @@ Briar
 SimpleX Chat
 Rana Nostr Pubkeys mining tool
 Nostr web clients (Snort & Iris)
+Feather Wallet
+Cake Wallet
 
 *🌐 Chroot connects to internet to download packages
 

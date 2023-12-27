@@ -23,6 +23,8 @@ whirlpool_url = "fda2da816431c25598f532486ac0da09/whirlpool-gui_0.10.3_amd64"
 whirlpool_v = whirlpool_url.split("/")[1]
 bitcoincore_url = "bitcoin-core-26.0/bitcoin-26.0-x86_64-linux-gnu"
 bitcoincore_v = bitcoincore_url.split("/")[1]
+feather_v = "feather-2.6.1-a"
+cake_v = "v4.12.1"
 
 ############################################
 
@@ -40,8 +42,10 @@ def add_script_config(text):
 def add_menu():
     subprocess.run("cp dotfiles/menu/Bitcoin.menu shared_with_chroot/", shell=True)
     subprocess.run("cp dotfiles/menu/Nostr.menu shared_with_chroot/", shell=True)
+    subprocess.run("cp dotfiles/menu/Monero.menu shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/Bitcoin.menu /etc/xdg/menus/applications-merged/")
     add_script_config("\ncp /tmp/Nostr.menu /etc/xdg/menus/applications-merged/")
+    add_script_config("\ncp /tmp/Monero.menu /etc/xdg/menus/applications-merged/")
 
 
 ############################################
@@ -155,3 +159,18 @@ def install_bitcoincore():
     add_script_config("\ntar xzf /tmp/"+ bitcoincore_v +".tar.gz -C /opt/bitcoin --strip-components=1")
     subprocess.run("cp dotfiles/dotdesktop/bitcoincore.desktop shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/bitcoincore.desktop /usr/share/applications/")
+
+def install_feather():
+    add_script_config("\nmkdir -p /opt/feather/")
+    add_script_config("\ncp /tmp/feather.png /opt/feather/feather.png")
+    add_script_config("\ncp /tmp/"+ feather_v +".AppImage /opt/feather/feather.AppImage")
+    subprocess.run("cp dotfiles/dotdesktop/featherwallet.desktop shared_with_chroot/", shell=True)
+    add_script_config("\nchmod +x /opt/feather/feather.AppImage")
+    add_script_config("\ncp /tmp/featherwallet.desktop /usr/share/applications/")
+
+def install_cake():
+    add_script_config("\nmkdir -p /opt/cakewallet/")
+    add_script_config("\ntar xf /tmp/cake.tar.xz -C /opt/cakewallet --strip-components=1")
+    subprocess.run("cp dotfiles/dotdesktop/cakewallet.desktop shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/cakewallet.desktop /usr/share/applications/")
+

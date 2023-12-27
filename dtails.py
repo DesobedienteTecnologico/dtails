@@ -83,8 +83,10 @@ class MyApp(tk.Tk):
         self.create_checkbox(left_frame, "Briar (221MB)", "")
         self.create_checkbox(left_frame, "SimpleX Chat (249MB)", "")
         self.create_checkbox(left_frame, "Rana Nostr pubkeys mining tool (1.46MB)", "")
-        self.create_checkbox(left_frame, "Nostr web clients (~1MB)", "")
-        self.create_checkbox(left_frame, "Bitcoin Core (45MB)", "gobbler")
+        self.create_checkbox(left_frame, "Nostr web clients (~1MB)", "gobbler")
+        self.create_checkbox(left_frame, "Bitcoin Core (45MB)", "")
+        self.create_checkbox(left_frame, "Feather Wallet (22MB)", "")
+        self.create_checkbox(left_frame, "Cake Wallet (77.9MB)", "")
 
         right_text = tk.Label(right_frame, text="Remove software", font="bold")
         right_text.pack(pady=5)
@@ -161,7 +163,7 @@ class MyApp(tk.Tk):
         label4_3.bind("<Button-1>", lambda e: self.copy_to_clipboard("http://btcpay.desobedientetecnologico.com/"))
 
         self.logo_img1 = Image.open("img/qrs.png")
-        self.logo_img1 = self.logo_img1.resize((500, 200))  # Resize image
+        self.logo_img1 = self.logo_img1.resize((500, 400))  # Resize image
         self.logo_photo1 = ImageTk.PhotoImage(self.logo_img1)
         logo_label1 = tk.Label(self.tab4, image=self.logo_photo1)
         logo_label1.pack(pady=1)
