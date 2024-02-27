@@ -8,12 +8,12 @@ from src.apps import *
 bisq_url = "v1.9.14/Bisq-64bit-1.9.14"
 bisq_v = bisq_url.split("/")[1]
 briar_v = "briar-desktop-debian-bullseye"
-simplex_url = "v5.4.0/simplex-desktop-ubuntu-20_04-x86_64"
+simplex_url = "v5.5.5/simplex-desktop-ubuntu-20_04-x86_64"
 simplex_v = simplex_url.split("/")[1]
 mycitadel_url = "v1.5.0/mycitadel_1.5.0-1_debian11_amd64"
 mycitadel_v = mycitadel_url.split("/")[1]
 rana_v = "v0.5.4"
-sparrow_url = "1.8.1/sparrow-1.8.1-x86_64"
+sparrow_url = "1.8.2/sparrow-1.8.2-x86_64"
 sparrow_v = sparrow_url.split("/")[1]
 specter_url = "v2.0.2/specter_desktop-v2.0.2-x86_64-linux-gnu"
 specter_v = specter_url.split("/")[1]
@@ -23,8 +23,8 @@ whirlpool_url = "fda2da816431c25598f532486ac0da09/whirlpool-gui_0.10.3_amd64"
 whirlpool_v = whirlpool_url.split("/")[1]
 bitcoincore_url = "bitcoin-core-26.0/bitcoin-26.0-x86_64-linux-gnu"
 bitcoincore_v = bitcoincore_url.split("/")[1]
-feather_v = "feather-2.6.1-a"
-cake_v = "v4.12.1"
+feather_v = "feather-2.6.2-a"
+cake_v = "v4.14.0"
 
 ############################################
 
