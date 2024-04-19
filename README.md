@@ -83,7 +83,8 @@ Connect your flash drive and choose the right one. (Double check it once you sel
 To install  | To remove |
 :----- | :----: |
 Sparrow Wallet    | Thunderbird |
-Bisq   | GIMP  |
+Liana Wallet   | GIMP  |
+Bisq
 BIP39 iancoleman
 SeedTool
 Border Wallets
