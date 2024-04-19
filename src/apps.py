@@ -185,6 +185,21 @@ def cake_wallet():
         subprocess.run("wget -O shared_with_chroot/cake.tar.xz https://github.com/cake-tech/cake_wallet/releases/download/"+ cake_v +"/Cake_Wallet_"+ cake_v +"_Linux.tar.xz", shell=True)
         install_cake()
 
+def liana_wallet():
+    file = sparrow_v +".tar.gz"
+    if os.path.exists("shared_with_chroot/"+ liana_v +".tar.gz"):
+        print_yellow(f"{file} already created. Skipping...\n")
+        add_script_config("\ntar -xvf /tmp/"+ liana_v +".tar.gz -C /opt")
+        subprocess.run("cp dotfiles/dotdesktop/liana.desktop shared_with_chroot/", shell=True)
+        add_script_config("\ncp /tmp/liana.desktop /usr/share/applications/")
+    else:
+        print_green("Downloading...")
+        subprocess.run("wget https://github.com/wizardsardine/liana/releases/download/"+ liana_url +".tar.gz -P shared_with_chroot", shell=True)
+        add_script_config("\nmkdir /opt/liana/ && tar -xvf /tmp/"+ liana_v +".tar.gz -C /opt/liana/ --strip-components 1")
+        subprocess.run("cp dotfiles/logos/liana.svg shared_with_chroot/", shell=True)
+        add_script_config("\ncp /tmp/liana.svg /opt/liana/")
+        subprocess.run("cp dotfiles/dotdesktop/liana.desktop shared_with_chroot/", shell=True)
+        add_script_config("\ncp /tmp/liana.desktop /usr/share/applications/")
 
 ################## END functions to install packages ##################
 ################## START functions to remove packages ##################
