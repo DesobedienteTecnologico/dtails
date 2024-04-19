@@ -25,7 +25,8 @@ bitcoincore_url = "bitcoin-core-26.0/bitcoin-26.0-x86_64-linux-gnu"
 bitcoincore_v = bitcoincore_url.split("/")[1]
 feather_v = "feather-2.6.2-a"
 cake_v = "v4.14.0"
-
+liana_url = "v5.0/liana-5.0-x86_64-linux-gnu"
+liana_v = liana_url.split("/")[1]
 ############################################
 
 def add_script_config(text):
