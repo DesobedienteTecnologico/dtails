@@ -55,7 +55,7 @@ class MyApp(tk.Tk):
         self.label.pack()
 
         ################## Tab 2 ##################
-        text_label = tk.Label(self.tab2, text="Select the software you would like to install or remove.\nBinaries from the original image will still unmodified.")
+        text_label = tk.Label(self.tab2, text="Select the software you would like to install or remove.\nBinaries from the original image will remain unmodified.")
         text_label.pack(pady=10)
 
         separator = ttk.Separator(self.tab2, orient="horizontal")

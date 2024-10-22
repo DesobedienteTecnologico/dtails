@@ -51,7 +51,7 @@ def bisq():
 
 def briar():
     file = briar_v +".deb"
-    if os.path.exists("shared_with_chroot/"+ briar_v + ".deb"):
+    if os.path.exists("shared_with_chroot/"+ file):
         print_yellow(f"{file} already created. Skipping...\n")
         install_briar()
     else:
@@ -172,7 +172,7 @@ def feather_wallet():
         install_feather()
     else:
         print_green("Downloading...")
-        subprocess.run("wget https://featherwallet.org/files/releases/linux-appimage-a/"+ feather_v +".AppImage https://featherwallet.org/img/feather.png -P shared_with_chroot", shell=True)
+        subprocess.run("wget https://featherwallet.org/files/releases/linux-appimage-a/"+ feather_v +"-a.AppImage https://featherwallet.org/img/feather.png -P shared_with_chroot", shell=True)
         install_feather()
 
 def cake_wallet():
@@ -186,8 +186,8 @@ def cake_wallet():
         install_cake()
 
 def liana_wallet():
-    file = sparrow_v +".tar.gz"
-    if os.path.exists("shared_with_chroot/"+ liana_v +".tar.gz"):
+    file = liana_v +".tar.gz"
+    if os.path.exists("shared_with_chroot/"+ file):
         print_yellow(f"{file} already created. Skipping...\n")
         add_script_config("\ntar -xvf /tmp/"+ liana_v +".tar.gz -C /opt")
         subprocess.run("cp dotfiles/dotdesktop/liana.desktop shared_with_chroot/", shell=True)
