@@ -82,6 +82,8 @@ def install_seedtool():
     subprocess.run("cp dotfiles/logos/seedtool.png shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/seedtool.png /opt/logos/")
     add_script_config("\ncp /tmp/seedtool.desktop /usr/share/applications/")
+    add_script_config("\ncp /tmp/seedtool.html /etc/skel/Tor\ Browser/")
+
 
 def install_border_wallets():
     subprocess.run("cp dotfiles/dotdesktop/borderwallet.desktop shared_with_chroot/", shell=True)
