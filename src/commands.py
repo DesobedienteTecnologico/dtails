@@ -79,7 +79,7 @@ def build_iso(img):
         subprocess.run(["isohybrid dtails.iso"], shell=True)
         print_yellow("dtails.iso image created")
     elif img.endswith('.img'):
-        print_yellow("Plase, follow the GUI instructions.")
+        print_yellow("Please, follow the GUI instructions.")
 
 ################## END Function to build the .iso ##################
 

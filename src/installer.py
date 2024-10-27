@@ -23,7 +23,7 @@ whirlpool_url = "62dfe35d0c82143c8fecc7d8432d4fd5/whirlpool-gui_0.10.4_amd64"
 whirlpool_v = whirlpool_url.split("/")[1]
 bitcoincore_url = "bitcoin-core-27.1/bitcoin-27.1-x86_64-linux-gnu"
 bitcoincore_v = bitcoincore_url.split("/")[1]
-feather_v = "feather-2.6.8"
+feather_v = "feather-2.7.0"
 cake_v = "v4.19.5"
 liana_url = "v7.0/liana-7.0-x86_64-linux-gnu"
 liana_v = liana_url.split("/")[1]
@@ -71,26 +71,27 @@ def install_simplex():
 
 def install_bip39_iancoleman():
     subprocess.run("cp dotfiles/dotdesktop/bip39ian.desktop shared_with_chroot/", shell=True)
-    add_script_config("\nmkdir /etc/skel/Tor\ Browser/")
+    add_script_config("\nmkdir /etc/skel/Tor\\ Browser/")
     add_script_config("\ncp /tmp/bip39ian.desktop /usr/share/applications/")
-    add_script_config("\ncp /tmp/bip39-standalone.html /etc/skel/Tor\ Browser/")
+    add_script_config("\ncp /tmp/bip39-standalone.html /etc/skel/Tor\\ Browser/")
 
 def install_seedtool():
     subprocess.run("cp dotfiles/dotdesktop/seedtool.desktop shared_with_chroot/", shell=True)
-    add_script_config("\nmkdir /etc/skel/Tor\ Browser/")
+    add_script_config("\nmkdir /etc/skel/Tor\\ Browser/")
     add_script_config("\nmkdir /opt/logos/")
     subprocess.run("cp dotfiles/logos/seedtool.png shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/seedtool.png /opt/logos/")
     add_script_config("\ncp /tmp/seedtool.desktop /usr/share/applications/")
+    add_script_config("\ncp /tmp/seedtool.html /etc/skel/Tor\\ Browser/")
 
 def install_border_wallets():
     subprocess.run("cp dotfiles/dotdesktop/borderwallet.desktop shared_with_chroot/", shell=True)
-    add_script_config("\nmkdir /etc/skel/Tor\ Browser/")
+    add_script_config("\nmkdir /etc/skel/Tor\\ Browser/")
     add_script_config("\nmkdir /opt/logos/")
     subprocess.run("cp dotfiles/logos/borderwallet.svg shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/borderwallet.svg /opt/logos/")
     add_script_config("\ncp /tmp/borderwallet.desktop /usr/share/applications/")
-    add_script_config("\ncp /tmp/borderwallet.html /etc/skel/Tor\ Browser/")
+    add_script_config("\ncp /tmp/borderwallet.html /etc/skel/Tor\\ Browser/")
 
 
 def install_whirlpool_gui():
@@ -164,7 +165,7 @@ def install_bitcoincore():
 def install_feather():
     add_script_config("\nmkdir -p /opt/feather/")
     add_script_config("\ncp /tmp/feather.png /opt/feather/feather.png")
-    add_script_config("\ncp /tmp/"+ feather_v +".AppImage /opt/feather/feather.AppImage")
+    add_script_config("\ncp /tmp/"+ feather_v +"-a.AppImage /opt/feather/feather.AppImage")
     subprocess.run("cp dotfiles/dotdesktop/featherwallet.desktop shared_with_chroot/", shell=True)
     add_script_config("\nchmod +x /opt/feather/feather.AppImage")
     add_script_config("\ncp /tmp/featherwallet.desktop /usr/share/applications/")
