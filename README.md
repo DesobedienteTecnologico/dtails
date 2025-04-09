@@ -7,7 +7,7 @@
   <a href="https://opensource.org/license/gpl-3-0/" title="License: GPLv3">
     <img src="https://img.shields.io/badge/License-GPLv3-red">
   </a>
-  <a href="https://twitter.com/DesobedienteTec" title="Twitter">
+  <a href="https://x.com/BangalaXMR" title="Twitter">
   <img src="https://img.shields.io/twitter/url?url=https%3A%2F%2Ftwitter.com%2FDesobedienteTec&label=Follow">
   </a>
 </p>
