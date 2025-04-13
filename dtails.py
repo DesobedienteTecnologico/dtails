@@ -214,10 +214,11 @@ class MyApp(tk.Tk):
                 function = eval(function)
                 function()
         if iso_work_path.endswith('.iso'):
-            app.tab_control.select(3)
+            self.tab_control.tab(self.tab3, state="normal")
+            self.tab_control.select(self.tab3)
         elif iso_work_path.endswith('.img'):
-            app.tab_control.tab(2, state="normal")
-            app.tab_control.select(2)
+            self.tab_control.tab(self.tab2, state="normal")
+            self.tab_control.select(self.tab2)
 
     def select_file(self):
         file_path = filedialog.askopenfilename(filetypes=[("Image .iso", "*.iso *.img")])
@@ -225,8 +226,8 @@ class MyApp(tk.Tk):
         if file_path:
             iso_path = file_path
             self.file_path.set(file_path) 
-            self.tab_control.tab(1, state="normal")
-            self.tab_control.select(1)
+            self.tab_control.tab(self.tab2, state="normal")
+            self.tab_control.select(self.tab2)
     
     def copy_to_clipboard(self, texto):
         text = texto
