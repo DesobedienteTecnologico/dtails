@@ -151,27 +151,13 @@ class MyApp(tk.Tk):
         thread.start()
 
         ################## Tab 4 ##################
-        label4_1 = tk.Label(self.tab4, text='DTails is a tool to remaster live Debian based images.\n\nTwitter: @DesobedienteTec', cursor="center_ptr")
-        label4_1.pack(pady=1)
-        label4_1.bind("<Button-1>", lambda e: self.copy_to_clipboard("https://twitter.com/DesobedienteTec"))
+        label2_1 = tk.Label(self.tab4, text='DTails is a tool to remaster live Debian based images.\n\nTwitter: @BangalaXMR', cursor="center_ptr")
+        label2_1.pack(pady=1)
+        label2_1.bind("<Button-1>", lambda e: self.copy_to_clipboard("https://twitter.com/DesobedienteTec"))
 
-        label4_2 = tk.Label(self.tab4, text='nostr: npub1dtmp3wrkyqafghjgwyk88mxvulfncc9lg6ppv4laet5cun66jtwqqpgte6', cursor="plus")
-        label4_2.pack(pady=1)
-        label4_2.bind("<Button-1>", lambda e: self.copy_to_clipboard("npub1dtmp3wrkyqafghjgwyk88mxvulfncc9lg6ppv4laet5cun66jtwqqpgte6"))
-
-        label4_3 = tk.Label(self.tab4, text='V4V: btcpay.desobedientetecnologico.com', cursor="plus")
-        label4_3.pack(pady=1)
-        label4_3.bind("<Button-1>", lambda e: self.copy_to_clipboard("http://btcpay.desobedientetecnologico.com/"))
-
-        self.logo_img1 = Image.open("img/qrs.png")
-        self.logo_img1 = self.logo_img1.resize((500, 400))  # Resize image
-        self.logo_photo1 = ImageTk.PhotoImage(self.logo_img1)
-        logo_label1 = tk.Label(self.tab4, image=self.logo_photo1)
-        logo_label1.pack(pady=1)
-
-        label4 = tk.Label(self.tab4, fg="blue", text='DTails tool - Made by DT with ♥', cursor="hand2")
-        label4.pack(pady=10, side="bottom")
-        label4.bind("<Button-1>", lambda e: self.callback("http://desobedientetecnologico.com"))
+        label2 = tk.Label(self.tab4, fg="blue", text='DTails tool - Made by DT with ♥ and maintained by BangalaXMR', cursor="hand2")
+        label2.pack(pady=10, side="bottom")
+        label2.bind("<Button-1>", lambda e: self.callback("https://github.com/BangalaXMR"))
 
 
         self.tab_control.tab(1, state="disabled")
