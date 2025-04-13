@@ -16,17 +16,16 @@ class MyApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("DTails")
-
-        # Create tab views
+        style.set_theme("clam")
         self.tab_control = ttk.Notebook(self)
         self.tab1 = ttk.Frame(self.tab_control)
         self.tab2 = ttk.Frame(self.tab_control)
         self.tab3 = ttk.Frame(self.tab_control)
         self.tab4 = ttk.Frame(self.tab_control)
-        self.tab_control.add(self.tab1, text='Select image')
-        self.tab_control.add(self.tab2, text='Modify and Build the image')
-        self.tab_control.add(self.tab3, text='Live install')
-        self.tab_control.add(self.tab4, text='About')
+        self.tab_control.add(self.tab1, text='Select image', state='normal')
+        self.tab_control.add(self.tab2, text='Modify and Build the image', state='disabled')
+        self.tab_control.add(self.tab3, text='Live install', state='disabled')
+        self.tab_control.add(self.tab4, text='About', state='normal')
         self.tab_control.pack(expand=1, fill='both')
         self.file_path = tk.StringVar()
         self.checkboxes = []
@@ -55,51 +54,60 @@ class MyApp(tk.Tk):
         self.label.pack()
 
         ################## Tab 2 ##################
-        text_label = tk.Label(self.tab2, text="Select the software you would like to install or remove.\nBinaries from the original image will remain unmodified.")
-        text_label.pack(pady=10)
-
-        separator = ttk.Separator(self.tab2, orient="horizontal")
-        separator.pack(fill="x", pady=10)
-
-        left_frame = tk.Frame(self.tab2, cursor="plus")
-        left_frame.pack(side="left", padx=20)
-
-        right_frame = tk.Frame(self.tab2, cursor="X_cursor")
-        right_frame.pack(side="right", padx=20)
-
-        left_text = tk.Label(left_frame, text="Add software", font="bold")
-        left_text.pack(pady=5)
-
-        self.create_checkbox(left_frame, "Sparrow Wallet (106MB)", "")
-        self.create_checkbox(left_frame, "Liana Wallet (13.8MB)", "")
-        self.create_checkbox(left_frame, "Bisq (222MB)", "")
-        self.create_checkbox(left_frame, "BIP39 iancoleman (4.34MB)", "")
-        self.create_checkbox(left_frame, "SeedTool (6.58MB)", "")
-        self.create_checkbox(left_frame, "Border Wallets (1.59MB)", "")
-        self.create_checkbox(left_frame, "Whirlpool GUI (327MB)", "")
-        self.create_checkbox(left_frame, "Specter Desktop (197MB)", "")
-        self.create_checkbox(left_frame, "MyCitadel Desktop (4.41MB)", "")
-        self.create_checkbox(left_frame, "Hodl Hodl and RoboSats (~1MB)", "")
-        self.create_checkbox(left_frame, "Mempool.space (~1MB)", "")
-        self.create_checkbox(left_frame, "Briar (221MB)", "")
-        self.create_checkbox(left_frame, "SimpleX Chat (249MB)", "")
-        self.create_checkbox(left_frame, "Rana Nostr pubkeys mining tool (1.46MB)", "")
-        self.create_checkbox(left_frame, "Nostr web clients (~1MB)", "gobbler")
-        self.create_checkbox(left_frame, "Bitcoin Core (45MB)", "")
-        self.create_checkbox(left_frame, "Feather Wallet (22MB)", "")
-        self.create_checkbox(left_frame, "Cake Wallet (77.9MB)", "")
-
-        right_text = tk.Label(right_frame, text="Remove software", font="bold")
-        right_text.pack(pady=5)
-
-        self.create_checkbox(right_frame, "Thunderbird (219MB)", "")
-        self.create_checkbox(right_frame, "GIMP (90MB)", "")
-
-
-        next_button2 = tk.Button(self.tab2, text="Build", command=self.get_selected_options)
-        next_button2.pack(side="bottom", pady=10)
-
-
+        # Top Frame
+        self.top_frame = tk.Frame(self.tab2)
+        self.top_frame.pack(side="top", fill="x", pady=10)
+        self.text_label_tab2 = tk.Label(self.top_frame, text="Select the software you would like to install or remove.\nBinaries from the original image will remain unmodified.")
+        self.text_label_tab2.pack()
+        # Separator between Top Frame and Middle Frame
+        self.top_separator = ttk.Separator(self.tab2, orient="horizontal")
+        self.top_separator.pack(fill="x", pady=10)
+        # Middle Frame containing Left and Right Frames
+        self.middle_frame = tk.Frame(self.tab2)
+        self.middle_frame.pack(fill="both", expand=True)
+        # Left Frame (add software)
+        self.left_frame = tk.Frame(self.middle_frame, cursor="plus")
+        self.left_frame.pack(side="left", padx=20, fill="both", expand=True)
+        self.left_text = tk.Label(self.left_frame, text="Add Software", font="bold")
+        self.left_text.pack(pady=5)
+        # Now you can use self.left_frame
+        self.create_checkbox(self.left_frame, "Sparrow Wallet (106MB)", "")
+        self.create_checkbox(self.left_frame, "Liana Wallet (13.8MB)", "")
+        self.create_checkbox(self.left_frame, "Bisq (222MB)", "")
+        self.create_checkbox(self.left_frame, "BIP39 iancoleman (4.34MB)", "")
+        self.create_checkbox(self.left_frame, "SeedTool (6.58MB)", "")
+        self.create_checkbox(self.left_frame, "Border Wallets (1.59MB)", "")
+        self.create_checkbox(self.left_frame, "Whirlpool GUI (327MB)", "")
+        self.create_checkbox(self.left_frame, "Specter Desktop (197MB)", "")
+        self.create_checkbox(self.left_frame, "MyCitadel Desktop (4.41MB)", "")
+        self.create_checkbox(self.left_frame, "Hodl Hodl and RoboSats (~1MB)", "")
+        self.create_checkbox(self.left_frame, "Mempool.space (~1MB)", "")
+        self.create_checkbox(self.left_frame, "Briar (221MB)", "")
+        self.create_checkbox(self.left_frame, "SimpleX Chat (249MB)", "")
+        self.create_checkbox(self.left_frame, "Rana Nostr pubkeys mining tool (1.46MB)", "")
+        self.create_checkbox(self.left_frame, "Nostr web clients (~1MB)", "gobbler")
+        self.create_checkbox(self.left_frame, "Bitcoin Core (45MB)", "")
+        self.create_checkbox(self.left_frame, "Feather Wallet (22MB)", "")
+        self.create_checkbox(self.left_frame, "Cake Wallet (77.9MB)", "")
+        # Separator between Left and Right Frames
+        self.middle_separator = ttk.Separator(self.middle_frame, orient="vertical")
+        self.middle_separator.pack(side="left", fill="y", padx=10)
+        # Right Frame (Remove Software)
+        self.right_frame = tk.Frame(self.middle_frame, cursor="X_cursor")
+        self.right_frame.pack(side="right", padx=20, fill="both", expand=True)
+        self.right_text = tk.Label(self.right_frame, text="Remove Software", font="bold")
+        self.right_text.pack(pady=5)
+        # Now you can use self.right_frame
+        self.create_checkbox(self.right_frame, "Thunderbird (219MB)", "")
+        self.create_checkbox(self.right_frame, "GIMP (90MB)", "")
+        # Separator between Middle Frame and Bottom Frame
+        self.bottom_separator = ttk.Separator(self.tab2, orient="horizontal")
+        self.bottom_separator.pack(fill="x", pady=10)
+        # Bottom Frame
+        self.bottom_frame = tk.Frame(self.tab2)
+        self.bottom_frame.pack(side="bottom", pady=10)
+        self.next_button2 = tk.Button(self.bottom_frame, text="Build", command=self.get_selected_options)
+        self.next_button2.pack()
         ################## Tab 3 ##################
         self.disconnect_button = tk.Label(self.tab3, text="\nChoose the device name from the list.\nDrive will appear at the right. Please, double check it before continuing")
         self.disconnect_button.pack()
