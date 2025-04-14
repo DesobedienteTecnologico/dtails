@@ -107,7 +107,7 @@ def chroot_script():
         add_script_config("\n#!/bin/bash\n\n")   
         add_script_config("\nexport PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin\n")
     except Exception as e:
-    print_red(f"An error occurred while creating the chroot script: {e}")
+        print_red(f"An error occurred while creating the chroot script: {e}")
     
 def remove_directories():
     try:
