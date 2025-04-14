@@ -116,8 +116,8 @@ class MyApp(tk.Tk):
         separator.pack(fill="x", pady=40)
 
         self.pendrive_var = tk.StringVar(self.tab3)
-        pendrive_dropdown = tk.OptionMenu(self.tab3, self.pendrive_var, "No pendrives found")
-        pendrive_dropdown.pack()
+        self.pendrive_dropdown = tk.OptionMenu(self.tab3, self.pendrive_var, "No pendrives found")
+        self.pendrive_dropdown.pack()
 
         self.image_label = tk.Label(self.tab3, text="Please connect a pendrive")
         self.image_label.pack()
@@ -133,25 +133,11 @@ class MyApp(tk.Tk):
             for device in devices:
                 if not device.get('ID_VENDOR'):
                     print_yellow("No USB Manufacturer found on internal database... Using idVendor instead.")
-                    self.pendrives[device.get('ID_VENDOR_ID')] = device.device_node[:-1]
+                    self.pendrives[device.get('ID_VENDOR_ID')] = device.device_node
                 else:
-                    self.pendrives[device.get('ID_VENDOR')] = device.device_node[:-1]
-            if self.pendrives:
-                #self.pendrive_var.set(list(self.pendrives)[0])
-                if self.pendrive_var.get() == "":
-                    self.pendrive_var.set("Select device")
-                pendrive_dropdown['menu'].delete(0, 'end')
-                for pendrive, route in self.pendrives.items():
-                    pendrive_dropdown['menu'].add_command(label=pendrive, command=tk._setit(self.pendrive_var, pendrive +" - "+ route))
-                #self.pendrive_var.set("Select device")
-                self.image_label.config(text="Pendrive connected", fg="green")
-                self.connect_button.config(state=tk.NORMAL)
-            else:
-                self.pendrive_var.set("No pendrives found")
-                pendrive_dropdown['menu'].delete(0, 'end')
-                pendrive_dropdown['menu'].add_command(label="No pendrives found")
-                self.image_label.config(text="Please connect a pendrive", fg="black")
-                self.connect_button.config(state=tk.DISABLED)
+                    self.pendrives[device.get('ID_VENDOR')] = device.device_node
+
+            self.after(0, self.update_pendrive_ui, self.pendrives, self.pendrive_dropdown)
             self.after(1000, update_pendrives)
 
         thread = threading.Thread(target=update_pendrives)
@@ -171,6 +157,22 @@ class MyApp(tk.Tk):
         self.tab_control.tab(1, state="disabled")
         self.tab_control.tab(2, state="disabled")
 
+    def update_pendrive_ui(self, pendrives, pendrive_dropdown):
+        if pendrives:
+            if self.pendrive_var.get() == "":
+                self.pendrive_var.set("Select device")
+            pendrive_dropdown['menu'].delete(0, 'end')
+            for pendrive, route in pendrives.items():
+                pendrive_dropdown['menu'].add_command(label=pendrive, command=tk._setit(self.pendrive_var, pendrive + " - " + route))
+            self.image_label.config(text="Pendrive connected", fg="green")
+            self.connect_button.config(state=tk.NORMAL)
+        else:
+            self.pendrive_var.set("No pendrives found")
+            pendrive_dropdown['menu'].delete(0, 'end')
+            pendrive_dropdown['menu'].add_command(label="No pendrives found")
+            self.image_label.config(text="Please connect a pendrive", fg="black")
+            self.connect_button.config(state=tk.DISABLED)
+    
     def print_device_node(self):
         vendor = self.pendrive_var.get()
         device_node = self.pendrives.get(vendor)
