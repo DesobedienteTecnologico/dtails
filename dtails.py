@@ -220,8 +220,8 @@ class MyApp(tk.Tk):
             self.tab_control.tab(self.tab3, state="normal")
             self.tab_control.select(self.tab3)
         elif iso_work_path.endswith('.img'):
-            self.tab_control.tab(self.tab2, state="normal")
-            self.tab_control.select(self.tab2)
+            self.tab_control.tab(self.tab3, state="normal")
+            self.tab_control.select(self.tab3)
 
     def select_file(self):
         file_path = filedialog.askopenfilename(filetypes=[("Image .iso", "*.iso *.img")])
