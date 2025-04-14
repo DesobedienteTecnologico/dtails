@@ -16,6 +16,7 @@ class MyApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("DTails")
+        style = ttk.Style()
         style.set_theme("clam")
         self.tab_control = ttk.Notebook(self)
         self.tab1 = ttk.Frame(self.tab_control)
