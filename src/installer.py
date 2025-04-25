@@ -13,7 +13,7 @@ simplex_v = simplex_url.split("/")[1]
 mycitadel_url = "v1.5.0/mycitadel_1.5.0-1_debian11_amd64"
 mycitadel_v = mycitadel_url.split("/")[1]
 rana_v = "v0.5.4"
-sparrow_url = "2.0.0/sparrow-2.0.0-x86_64"
+sparrow_url = "2.1.3/sparrow-2.1.3-x86_64"
 sparrow_v = sparrow_url.split("/")[1]
 specter_url = "v2.0.5/specter_desktop-v2.0.5-x86_64-linux-gnu"
 specter_v = specter_url.split("/")[1]
@@ -21,9 +21,9 @@ specterd_url = specter_url.replace("specter_desktop","specterd")
 specterd_v = specterd_url.split("/")[1]
 whirlpool_url = "62dfe35d0c82143c8fecc7d8432d4fd5/whirlpool-gui_0.10.4_amd64"
 whirlpool_v = whirlpool_url.split("/")[1]
-bitcoincore_url = "bitcoin-core-27.1/bitcoin-27.1-x86_64-linux-gnu"
+bitcoincore_url = "bitcoin-core-29.0/bitcoin-29.0-x86_64-linux-gnu"
 bitcoincore_v = bitcoincore_url.split("/")[1]
-feather_v = "feather-2.7.0"
+feather_v = "feather-2.8.1"
 cake_v = "v4.19.5"
 liana_url = "v7.0/liana-7.0-x86_64-linux-gnu"
 liana_v = liana_url.split("/")[1]
@@ -165,7 +165,7 @@ def install_bitcoincore():
 def install_feather():
     add_script_config("\nmkdir -p /opt/feather/")
     add_script_config("\ncp /tmp/feather.png /opt/feather/feather.png")
-    add_script_config("\ncp /tmp/"+ feather_v +"-a.AppImage /opt/feather/feather.AppImage")
+    add_script_config("\ncp /tmp/"+ feather_v +".AppImage /opt/feather/feather.AppImage")
     subprocess.run("cp dotfiles/dotdesktop/featherwallet.desktop shared_with_chroot/", shell=True)
     add_script_config("\nchmod +x /opt/feather/feather.AppImage")
     add_script_config("\ncp /tmp/featherwallet.desktop /usr/share/applications/")

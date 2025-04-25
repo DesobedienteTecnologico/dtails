@@ -70,7 +70,7 @@ class MyApp(tk.Tk):
         left_text = tk.Label(left_frame, text="Add software", font="bold")
         left_text.pack(pady=5)
 
-        self.create_checkbox(left_frame, "Sparrow Wallet (106MB)", "")
+        self.create_checkbox(left_frame, "Sparrow Wallet (123MB)", "")
         self.create_checkbox(left_frame, "Liana Wallet (13.8MB)", "")
         self.create_checkbox(left_frame, "Bisq (222MB)", "")
         self.create_checkbox(left_frame, "BIP39 iancoleman (4.34MB)", "")
@@ -85,8 +85,8 @@ class MyApp(tk.Tk):
         self.create_checkbox(left_frame, "SimpleX Chat (249MB)", "")
         self.create_checkbox(left_frame, "Rana Nostr pubkeys mining tool (1.46MB)", "")
         self.create_checkbox(left_frame, "Nostr web clients (~1MB)", "gobbler")
-        self.create_checkbox(left_frame, "Bitcoin Core (45MB)", "")
-        self.create_checkbox(left_frame, "Feather Wallet (22MB)", "")
+        self.create_checkbox(left_frame, "Bitcoin Core (104MB)", "")
+        self.create_checkbox(left_frame, "Feather Wallet (28MB)", "")
         self.create_checkbox(left_frame, "Cake Wallet (77.9MB)", "")
 
         right_text = tk.Label(right_frame, text="Remove software", font="bold")
