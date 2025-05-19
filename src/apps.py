@@ -80,7 +80,7 @@ def seedtool():
     if os.path.exists("shared_with_chroot/"+ file):
         install_seedtool()
     else:
-        subprocess.run("wget -O shared_with_chroot/seedtool.html https://github.com/BitcoinQnA/seedtool/releases/download/2.0.2/index.html", shell=True)
+        subprocess.run("wget -O shared_with_chroot/seedtool.html https://github.com/BitcoinQnA/seedtool/releases/download/2.2.0/index.html", shell=True)
         install_seedtool()
 
 def border_wallets():
@@ -172,7 +172,7 @@ def feather_wallet():
         install_feather()
     else:
         print_green("Downloading...")
-        subprocess.run("wget https://featherwallet.org/files/releases/linux-appimage-a/"+ feather_v +"-a.AppImage https://featherwallet.org/img/feather.png -P shared_with_chroot", shell=True)
+        subprocess.run("wget https://featherwallet.org/files/releases/linux-appimage/"+ feather_v +".AppImage https://featherwallet.org/img/feather.png -P shared_with_chroot", shell=True)
         install_feather()
 
 def cake_wallet():
