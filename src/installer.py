@@ -5,25 +5,25 @@ from src.commands import *
 from src.apps import *
 
 # Variables
-bisq_url = "v1.9.17/Bisq-64bit-1.9.17"
+bisq_url = "v1.9.21/Bisq-64bit-1.9.21"
 bisq_v = bisq_url.split("/")[1]
 briar_v = "briar-desktop-debian-bullseye"
-simplex_url = "v6.0.5/simplex-desktop-ubuntu-20_04-x86_64"
+simplex_url = "v6.4.0/simplex-desktop-ubuntu-22_04-x86_64"
 simplex_v = simplex_url.split("/")[1]
 mycitadel_url = "v1.5.0/mycitadel_1.5.0-1_debian11_amd64"
 mycitadel_v = mycitadel_url.split("/")[1]
-rana_v = "v0.5.4"
-sparrow_url = "2.2.0/sparrowwallet-2.2.0-x86_64"
+rana_v = "v0.5.5"
+sparrow_url = "2.2.3/sparrowwallet-2.2.3-x86_64"
 sparrow_v = sparrow_url.split("/")[1]
-specter_url = "v2.0.5/specter_desktop-v2.0.5-x86_64-linux-gnu"
+specter_url = "v2.1.1/specter_desktop-v2.1.1-x86_64-linux-gnu"
 specter_v = specter_url.split("/")[1]
 specterd_url = specter_url.replace("specter_desktop","specterd")
 specterd_v = specterd_url.split("/")[1]
 bitcoincore_url = "bitcoin-core-29.0/bitcoin-29.0-x86_64-linux-gnu"
 bitcoincore_v = bitcoincore_url.split("/")[1]
 feather_v = "feather-2.8.1"
-cake_v = "v4.19.5"
-liana_url = "v7.0/liana-7.0-x86_64-linux-gnu"
+cake_v = "v5.1.2"
+liana_url = "v11.1/liana-11.1-x86_64-linux-gnu"
 liana_v = liana_url.split("/")[1]
 ############################################
 
