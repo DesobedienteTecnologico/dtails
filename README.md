@@ -88,7 +88,6 @@ Bisq
 BIP39 iancoleman
 SeedTool
 Border Wallets
-Whirlpool GUI [🌐](https://github.com/DesobedienteTecnologico/dtails/pull/15)
 Specter Desktop
 MyCitadel Desktop
 Bitcoin Core
@@ -100,8 +99,6 @@ Rana Nostr Pubkeys mining tool
 Nostr web clients (Snort & Iris)
 Feather Wallet
 Cake Wallet
-
-*🌐 Chroot connects to internet to download packages
 
 ---
 

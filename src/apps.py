@@ -91,15 +91,6 @@ def border_wallets():
         subprocess.run("wget -O shared_with_chroot/borderwallet.html https://github.com/microchad/borderwallets/releases/download/1.0.5/borderwallets.html", shell=True)
         install_border_wallets()
 
-def whirlpool_gui():
-    file = whirlpool_url +".deb"
-    if os.path.exists("shared_with_chroot/"+ file):
-        install_whirlpool_gui()
-    else:
-        print_green("Downloading...")
-        subprocess.run("wget https://code.samourai.io/whirlpool/whirlpool-gui/uploads/"+ whirlpool_url +".deb -P shared_with_chroot", shell=True)        
-        install_whirlpool_gui()
-
 def specter_desktop():
     file = specter_url +".tar.gz"
     if os.path.exists("shared_with_chroot/"+ file):
