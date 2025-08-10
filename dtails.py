@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QSizePolicy)
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QSizePolicy, QAction)
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt, QStorageInfo
 
@@ -18,6 +18,7 @@ class TabbedApp(QMainWindow):
         self.tabs = QTabWidget()
         self.layout.addWidget(self.tabs)
 
+        self.create_menu()
         self.create_tabs()
         self.tabs.tabBar().setVisible(False)
 
@@ -90,6 +91,22 @@ class TabbedApp(QMainWindow):
         tab1.setLayout(tab1_layout)
         self.tabs.addTab(tab1, "Tab 1")
 
+
+    def create_menu(self):
+        menu_bar = self.menuBar()
+
+        file_menu = menu_bar.addMenu("File")
+        exit_action = QAction("Exit", self)
+        exit_action.triggered.connect(self.close)
+        file_menu.addAction(exit_action)
+
+        help_menu = menu_bar.addMenu("Verify")
+        verify_action = QAction("Verify", self)
+        help_menu.addAction(verify_action)
+
+        help_menu = menu_bar.addMenu("Help")
+        about_action = QAction("About", self)
+        help_menu.addAction(about_action)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
