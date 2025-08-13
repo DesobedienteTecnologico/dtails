@@ -1,10 +1,37 @@
-import sys
+import sys, os
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QSizePolicy, QAction)
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QSizePolicy, QAction,
+    QFileDialog)
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt, QStorageInfo
 
 class TabbedApp(QMainWindow):
+
+    button_style = """
+    QPushButton {
+        background-color: #4CAF50;  /* Green background */
+        color: white;                /* White text */
+        border: none;                /* No border */
+        padding: 10px;              /* Padding around text */
+        border-radius: 5px;         /* Rounded corners */
+        font-size: 14px;            /* Font size */
+    }
+
+    QPushButton:hover {
+        background-color: #45a049;   /* Darker green on hover */
+    }
+
+    QPushButton:pressed {
+        background-color: #3e8e41;   /* Even darker green when pressed */
+    }
+
+    QPushButton:disabled {
+        background-color: #a9a9a9;   /* Gray background for disabled state */
+        color: #d3d3d3;              /* Light gray text for disabled state */
+    }
+
+    """
+
 
     def __init__(self):
         super().__init__()
@@ -40,8 +67,17 @@ class TabbedApp(QMainWindow):
         button_layout.setSpacing(20) 
 
         self.button1 = QPushButton("Select Image")
+        self.button1.setStyleSheet(self.button_style)
+        self.button1.clicked.connect(self.select_image_file)
+
         self.button2 = QPushButton("Select Storage")
+        self.button2.setStyleSheet(self.button_style)
+        self.button2.setEnabled(False)
+
         self.button3 = QPushButton("Add / Remove Sofware")
+        self.button3.setStyleSheet(self.button_style)
+        self.button3.setEnabled(False)
+
 
         size_policy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.button1.setSizePolicy(size_policy)
@@ -85,12 +121,24 @@ class TabbedApp(QMainWindow):
 
         self.nav_layout1 = QHBoxLayout()
         self.nav_button_to_tab2 = QPushButton("Confirm")
+        self.nav_button_to_tab2.setStyleSheet(self.button_style)
+        self.nav_button_to_tab2.setEnabled(False)
         self.nav_button_to_tab2.clicked.connect(lambda: self.tabs.setCurrentIndex(1))
         self.nav_layout1.addWidget(self.nav_button_to_tab2, alignment=Qt.AlignRight)
         tab1_layout.addLayout(self.nav_layout1)
         tab1.setLayout(tab1_layout)
         self.tabs.addTab(tab1, "Tab 1")
 
+
+    def select_image_file(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly
+        file_filter = "Image Files (*.iso *.img);;All Files (*)"
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select Image File", "", file_filter, options=options)
+        if file_path:
+            self.selected_image = file_path
+            self.button1.setText(os.path.basename(file_path))
+            self.button2.setEnabled(True)
 
     def create_menu(self):
         menu_bar = self.menuBar()
