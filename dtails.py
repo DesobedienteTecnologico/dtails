@@ -66,24 +66,24 @@ class TabbedApp(QMainWindow):
         button_layout = QHBoxLayout()
         button_layout.setSpacing(20) 
 
-        self.button1 = QPushButton("Select Image")
-        self.button1.setStyleSheet(self.button_style)
-        self.button1.clicked.connect(self.select_image_file)
+        self.button_select_image = QPushButton("Select Image")
+        self.button_select_image.setStyleSheet(self.button_style)
+        self.button_select_image.clicked.connect(self.select_image_file)
 
-        self.button2 = QPushButton("Select Storage")
-        self.button2.setStyleSheet(self.button_style)
-        self.button2.setEnabled(False)
-        self.button2.clicked.connect(self.choose_block_device)
+        self.button_select_storage = QPushButton("Select Storage")
+        self.button_select_storage.setStyleSheet(self.button_style)
+        self.button_select_storage.setEnabled(False)
+        self.button_select_storage.clicked.connect(self.choose_block_device)
 
-        self.button3 = QPushButton("Add / Remove Sofware")
-        self.button3.setStyleSheet(self.button_style)
-        self.button3.setEnabled(False)
+        self.button_select_software = QPushButton("Add / Remove Sofware")
+        self.button_select_software.setStyleSheet(self.button_style)
+        self.button_select_software.setEnabled(False)
 
 
         size_policy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        self.button1.setSizePolicy(size_policy)
-        self.button2.setSizePolicy(size_policy)
-        self.button3.setSizePolicy(size_policy)
+        self.button_select_image.setSizePolicy(size_policy)
+        self.button_select_storage.setSizePolicy(size_policy)
+        self.button_select_software.setSizePolicy(size_policy)
 
         left_v = QVBoxLayout()
         left_label = QLabel("Image to modify")
@@ -92,7 +92,7 @@ class TabbedApp(QMainWindow):
         left_label.setStyleSheet("font-size:12px;")
         left_v.setSpacing(4)
         left_v.addWidget(left_label)
-        left_v.addWidget(self.button1)
+        left_v.addWidget(self.button_select_image)
         left_v.setEnabled(False)
 
         middle_v = QVBoxLayout()
@@ -102,7 +102,7 @@ class TabbedApp(QMainWindow):
         middle_label.setStyleSheet("font-size:12px;")
         middle_v.setSpacing(4)
         middle_v.addWidget(middle_label)
-        middle_v.addWidget(self.button2)
+        middle_v.addWidget(self.button_select_storage)
 
         right_v = QVBoxLayout()
         right_label = QLabel("Manage Software")
@@ -111,7 +111,7 @@ class TabbedApp(QMainWindow):
         right_label.setStyleSheet("font-size:12px;")
         right_v.setSpacing(4)
         right_v.addWidget(right_label)
-        right_v.addWidget(self.button3)
+        right_v.addWidget(self.button_select_software)
 
         button_layout.addLayout(left_v)
         button_layout.addLayout(middle_v)
@@ -154,8 +154,8 @@ class TabbedApp(QMainWindow):
         file_path, _ = QFileDialog.getOpenFileName(self, "Select Image File", "", file_filter, options=options)
         if file_path:
             self.selected_image = file_path
-            self.button1.setText(os.path.basename(file_path))
-            self.button2.setEnabled(True)
+            self.button_select_image.setText(os.path.basename(file_path))
+            self.button_select_storage.setEnabled(True)
 
     def choose_block_device(self):
         # Only run on Linux
@@ -271,9 +271,9 @@ class TabbedApp(QMainWindow):
                 self.selected_device = chosen_dev['path']
                 vendor_part = f"{chosen_dev['vendor']} " if chosen_dev['vendor'] else ''
                 model_part = f"{chosen_dev['model']}" if chosen_dev['model'] else chosen_dev['name']
-                self.button2.setText(os.path.basename(chosen_dev['path']) + ' - ' + vendor_part + model_part)
+                self.button_select_storage.setText(os.path.basename(chosen_dev['path']) + ' - ' + vendor_part + model_part)
                 if getattr(self, 'selected_image', None):
-                    self.button3.setEnabled(True)
+                    self.button_select_software.setEnabled(True)
                 return chosen_dev['path']
 
         return None
