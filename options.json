@@ -1,0 +1,29 @@
+{
+    "options": [
+        {
+            "name": "Option 1",
+            "command_external": "Value 1A",
+            "command_internal": "Value 1B"
+        },
+        {
+            "name": "Option 2",
+            "command_external": "Value 2A",
+            "command_internal": "Value 2B"
+        },
+        {
+            "name": "Option 3",
+            "command_external": "Value 3A",
+            "command_internal": "Value 3B"
+        },
+        {
+            "name": "Option 4",
+            "command_external": "Value 4A",
+            "command_internal": "Value 4B"
+        },
+        {
+            "name": "Option 5",
+            "command_external": "Value 5A",
+            "command_internal": "Value 5B"
+        }
+    ]
+}
