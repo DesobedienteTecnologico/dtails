@@ -1,7 +1,7 @@
-import sys, os, subprocess
+import sys, os, subprocess, json
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QSizePolicy, QAction,
-    QFileDialog, QDialog, QListWidget, QListWidgetItem)
+    QFileDialog, QDialog, QListWidget, QListWidgetItem, QMessageBox)
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt, QStorageInfo
 
@@ -78,7 +78,8 @@ class TabbedApp(QMainWindow):
         self.button_select_software = QPushButton("Add / Remove Sofware")
         self.button_select_software.setStyleSheet(self.button_style)
         self.button_select_software.setEnabled(False)
-
+        self.button_select_software.clicked.connect(self.enable_next_tab)
+        self.button_select_software.clicked.connect(lambda: self.tabs.setCurrentIndex(1))
 
         size_policy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.button_select_image.setSizePolicy(size_policy)
@@ -121,15 +122,45 @@ class TabbedApp(QMainWindow):
         tab1_layout.addLayout(button_layout)
 
         self.nav_layout1 = QHBoxLayout()
-        self.nav_button_to_tab2 = QPushButton("Confirm")
-        self.nav_button_to_tab2.setStyleSheet(self.button_style)
-        self.nav_button_to_tab2.setEnabled(False)
-        self.nav_button_to_tab2.clicked.connect(lambda: self.tabs.setCurrentIndex(1))
-        self.nav_layout1.addWidget(self.nav_button_to_tab2, alignment=Qt.AlignRight)
+        self.flash_device = QPushButton("Write Image")
+        self.flash_device.setStyleSheet(self.button_style)
+        self.flash_device.setEnabled(False)
+        #self.flash_device.clicked.connect("#")
+        self.nav_layout1.addWidget(self.flash_device, alignment=Qt.AlignRight)
+
         tab1_layout.addLayout(self.nav_layout1)
         tab1.setLayout(tab1_layout)
         self.tabs.addTab(tab1, "Tab 1")
 
+        self.tab2 = QWidget()
+        tab2_layout = QVBoxLayout()
+        label2 = QLabel("Select the software to be installed")
+
+        self.list_widget = QListWidget()
+        self.load_options_from_json()
+        self.list_widget.setSelectionMode(QListWidget.MultiSelection)
+
+        tab2_layout.addWidget(label2)
+        tab2_layout.addWidget(self.list_widget)
+
+        nav_layout2 = QHBoxLayout()
+
+        back_button = QPushButton("Back")
+        back_button.clicked.connect(lambda: self.tabs.setCurrentIndex(0))
+        nav_layout2.addWidget(back_button)
+
+        nav_button_to_main = QPushButton("Next")
+        nav_button_to_main.clicked.connect(self.show_selected_options)
+        nav_layout2.addWidget(nav_button_to_main)
+
+        tab2_layout.addLayout(nav_layout2)
+        self.tab2.setLayout(tab2_layout)
+        self.tabs.addTab(self.tab2, "Tab 2")
+        self.tabs.setTabEnabled(1, False)
+
+    def enable_next_tab(self):
+        self.tabs.setTabEnabled(1, True)
+        self.tabs.setCurrentIndex(1)
 
     def create_menu(self):
         menu_bar = self.menuBar()
@@ -156,6 +187,35 @@ class TabbedApp(QMainWindow):
             self.selected_image = file_path
             self.button_select_image.setText(os.path.basename(file_path))
             self.button_select_storage.setEnabled(True)
+
+    def load_options_from_json(self):
+        json_file_path = 'options.json'
+        if os.path.exists(json_file_path):
+            with open(json_file_path, 'r') as file:
+                data = json.load(file)
+                for option in data["options"]:
+                    self.list_widget.addItem(option["name"])
+        else:
+            print(f"Error: The file {json_file_path} does not exist.")
+
+    def show_selected_options(self):
+        selected_items = self.list_widget.selectedItems()
+        selected_options = [item.text() for item in selected_items]
+
+        if selected_options:
+            options_text = "\n".join(selected_options)
+            reply = QMessageBox.question(self, "Confirm Selection",
+                                        f"You have selected the following options:\n{options_text}\n\nDo you want to proceed?",
+                                        QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+            if reply == QMessageBox.Yes:
+                print("User confirmed the selection.")
+                self.tabs.setCurrentIndex(0)
+                self.flash_device.setEnabled(True)
+            else:
+                print("User canceled the selection.")
+        else:
+            QMessageBox.warning(self, "No Selection", "Please select at least one option.")
 
     def choose_block_device(self):
         # Only run on Linux
