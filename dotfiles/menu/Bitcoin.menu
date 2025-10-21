@@ -20,6 +20,7 @@
         <Filename>specter.desktop</Filename>
         <Filename>io.mycitadel.Wallet.desktop</Filename>
         <Filename>bitcoincore.desktop</Filename>
+        <Filename>bitcoinknots.desktop</Filename>
         <Filename>cakewallet.desktop</Filename>
     </Include>
   </Menu>

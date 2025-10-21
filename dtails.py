@@ -86,6 +86,7 @@ class MyApp(tk.Tk):
         self.create_checkbox(left_frame, "Rana Nostr pubkeys mining tool (1.46MB)", "")
         self.create_checkbox(left_frame, "Nostr web clients (~1MB)", "gobbler")
         self.create_checkbox(left_frame, "Bitcoin Core (104MB)", "")
+        self.create_checkbox(left_frame, "Bitcoin Knots (106MB)", "")
         self.create_checkbox(left_frame, "Feather Wallet (28MB)", "")
         self.create_checkbox(left_frame, "Cake Wallet (77.9MB)", "")
 
