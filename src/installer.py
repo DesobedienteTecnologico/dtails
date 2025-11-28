@@ -21,6 +21,8 @@ specterd_url = specter_url.replace("specter_desktop","specterd")
 specterd_v = specterd_url.split("/")[1]
 bitcoincore_url = "bitcoin-core-29.0/bitcoin-29.0-x86_64-linux-gnu"
 bitcoincore_v = bitcoincore_url.split("/")[1]
+bitcoinknots_url = "bitcoin-knots-29.2.knots20251010/bitcoin-knots-29.2.knots20251010-x86_64-linux-gnu"
+bitcoinknots_v = bitcoinknots_url.split("/")[1]
 feather_v = "feather-2.8.1"
 cake_v = "v5.1.2"
 liana_url = "v11.1/liana-11.1-x86_64-linux-gnu"
@@ -132,6 +134,13 @@ def install_bitcoincore():
     add_script_config("\ntar xzf /tmp/"+ bitcoincore_v +".tar.gz -C /opt/bitcoin --strip-components=1")
     subprocess.run("cp dotfiles/dotdesktop/bitcoincore.desktop shared_with_chroot/", shell=True)
     add_script_config("\ncp /tmp/bitcoincore.desktop /usr/share/applications/")
+
+def install_bitcoinknots():
+    add_script_config("\nmkdir -p /opt/bitcoinknots/")
+    add_script_config("\ncp /tmp/bitcoin256.png /opt/bitcoinknots/bitcoin256.png")
+    add_script_config("\ntar xzf /tmp/"+ bitcoinknots_v +".tar.gz -C /opt/bitcoinknots --strip-components=1")
+    subprocess.run("cp dotfiles/dotdesktop/bitcoinknots.desktop shared_with_chroot/", shell=True)
+    add_script_config("\ncp /tmp/bitcoinknots.desktop /usr/share/applications/")
 
 def install_feather():
     add_script_config("\nmkdir -p /opt/feather/")
