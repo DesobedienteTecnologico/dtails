@@ -1,0 +1,13 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+ "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+<Menu>
+  <Name>Communication</Name>
+  <Menu>
+    <Name>Communication</Name>
+    <Directory>Bitcoin.directory</Directory>
+    <Include>
+        <Filename>org.briarproject.Briar.desktop</Filename>
+        <Filename>simplex-simplex.desktop</Filename>
+    </Include>
+  </Menu>
+</Menu>

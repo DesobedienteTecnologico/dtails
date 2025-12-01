@@ -1,7 +1,7 @@
 [Desktop Entry]
 Comment=Entropy Grid Generator
 Name=Bitcoin Border Wallets
-Exec=/usr/local/bin/tor-browser /home/amnesia/Tor\ Browser/borderwallet.html
+Exec=/usr/local/bin/tor-browser /opt/borderwallet.html
 Icon=/opt/logos/borderwallet.svg
 Categories=Finance;Network;Bitcoin;
 StartupNotify=true
