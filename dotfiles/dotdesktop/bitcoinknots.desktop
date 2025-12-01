@@ -1,0 +1,13 @@
+[Desktop Entry]
+Comment=Bitcoin Knots - Bitcoin Core with additional features
+Exec=/opt/bitcoinknots/bin/./bitcoin-qt
+GenericName[en_US]=Bitcoin Full Node
+GenericName=Bitcoin Full Node
+Icon=/opt/bitcoinknots/bitcoin256.png
+Name[en_US]=Bitcoin Knots
+Name=Bitcoin Knots
+Categories=Finance;Network;
+StartupNotify=true
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/bitcoin;

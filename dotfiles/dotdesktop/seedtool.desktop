@@ -1,9 +1,9 @@
 [Desktop Entry]
 Comment=Improved version of Ian Coleman web tool for converting BIP39 mnemonic codes
 Name=SeedTool
-Exec=/usr/local/bin/tor-browser /home/amnesia/Tor\ Browser/seedtool.html
+Exec=/usr/local/bin/tor-browser /opt/seedtool.html
 Icon=/opt/logos/seedtool.png
-Categories=Finance;Network;Bitcoin;
+Categories=Bitcoin;
 StartupNotify=true
 Terminal=false
 Type=Application
