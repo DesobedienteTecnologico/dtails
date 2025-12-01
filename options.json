@@ -1,29 +1,335 @@
 {
-    "options": [
-        {
-            "name": "Option 1",
-            "command_external": "Value 1A",
-            "command_internal": "Value 1B"
-        },
-        {
-            "name": "Option 2",
-            "command_external": "Value 2A",
-            "command_internal": "Value 2B"
-        },
-        {
-            "name": "Option 3",
-            "command_external": "Value 3A",
-            "command_internal": "Value 3B"
-        },
-        {
-            "name": "Option 4",
-            "command_external": "Value 4A",
-            "command_internal": "Value 4B"
-        },
-        {
-            "name": "Option 5",
-            "command_external": "Value 5A",
-            "command_internal": "Value 5B"
-        }
+  "meta": {
+    "saw": true
+  },
+  "add_software": {
+    "categories": [
+      {
+        "key": "bitcoin",
+        "title": "Bitcoin",
+        "icon": "img/btc.svg",
+        "menu_file": "Bitcoin.menu",
+        "items": [
+          {
+            "name": "Bitcoin Core",
+            "version": "30.0",
+            "size_mb": 72.3,
+            "external_commands": [
+              "wget -q https://bitcoincore.org/bin/bitcoin-core-{version}/bitcoin-{version}-x86_64-linux-gnu.tar.gz -P shared_with_chroot",
+              "wget -q https://raw.githubusercontent.com/bitcoin/bitcoin/master/share/pixmaps/bitcoin256.png -P shared_with_chroot",
+              "cp dotfiles/dotdesktop/bitcoincore.desktop shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "mkdir -p /opt/bitcoin/",
+              "cp /tmp/bitcoincore.desktop /usr/share/applications/",
+              "cp /tmp/bitcoin256.png /opt/bitcoin/bitcoin256.png",
+              "tar xzf /tmp/bitcoin-{version}-x86_64-linux-gnu.tar.gz -C /opt/bitcoin --strip-components=1"
+            ]
+          },
+          {
+            "name": "Sparrow Wallet",
+            "version": "2.2.3",
+            "size_mb": 106,
+            "external_commands": [
+              "wget -q https://github.com/sparrowwallet/sparrow/releases/download/{version}/sparrowwallet-{version}-x86_64.tar.gz -P shared_with_chroot",
+              "cp dotfiles/dotdesktop/sparrow.desktop shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "tar -xvf /tmp/sparrowwallet-{version}-x86_64.tar.gz -C /opt",
+              "cp /tmp/sparrow.desktop /usr/share/applications/"
+            ]
+          },
+          {
+            "name": "Specter Desktop",
+            "version": "2.0.5",
+            "size_mb": 136,
+            "external_commands": [
+              "wget -q https://github.com/cryptoadvance/specter-desktop/releases/download/v{version}/specter_desktop-v{version}-x86_64-linux-gnu.tar.gz -P shared_with_chroot",
+              "wget -q -O shared_with_chroot/specter_logo.png https://raw.githubusercontent.com/cryptoadvance/specter-desktop/72fed92dd5d00e3164adcc97decf5ae03328538a/src/cryptoadvance/specter/static/img/v1-icons/icon.png",
+              "wget -q -O shared_with_chroot/NotoColorEmoji.ttf https://raw.githubusercontent.com/googlefonts/noto-emoji/main/fonts/NotoColorEmoji.ttf",
+              "cp dotfiles/dotconf/ferm_specter.conf shared_with_chroot/",
+              "cp dotfiles/dotdesktop/specter.desktop shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "cd /tmp/ ; tar -zxvf specter_desktop-v{version}-x86_64-linux-gnu.tar.gz",
+              "mkdir -p /opt/specter/",
+              "cp /tmp/specter_logo.png /opt/specter/logo.png",
+              "cp /tmp/Specter-*.AppImage /opt/specter/Specter.AppImage",
+              "cp /tmp/udev/*.rules /etc/udev/rules.d/",
+              "mkdir -p /etc/skel/.fonts/",
+              "cp /tmp/NotoColorEmoji.ttf /etc/skel/.fonts/NotoColorEmoji.ttf",
+              "mv /tmp/ferm_specter.conf /etc/ferm/ferm.conf",
+              "cp /tmp/specter.desktop /usr/share/applications/"
+            ]
+          },
+          {
+            "name": "Bisq",
+            "version": "1.9.21",
+            "size_mb": 384,
+            "external_commands": [
+              "wget -q https://bisq.network/downloads/v{version}/Bisq-64bit-{version}.deb -P shared_with_chroot",
+              "cp dotfiles/scripts/setup_bisq shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "dpkg -i /tmp/Bisq-64bit-{version}.deb",
+              "/tmp/./setup_bisq"
+            ]
+          },
+          {
+            "name": "Liana Wallet",
+            "version": "11.1",
+            "size_mb": 17.4,
+            "external_commands": [
+              "wget -q https://github.com/wizardsardine/liana/releases/download/v{version}/liana-{version}-x86_64-linux-gnu.tar.gz -P shared_with_chroot",
+              "cp dotfiles/logos/liana.svg shared_with_chroot/",
+              "cp dotfiles/dotdesktop/liana.desktop shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "mkdir /opt/liana/ && tar -xvf /tmp/liana-{version}-x86_64-linux-gnu.tar.gz -C /opt/liana/ --strip-components 1",
+              "cp /tmp/liana.svg /opt/liana/",
+              "cp /tmp/liana.desktop /usr/share/applications/"
+            ]
+          },
+          {
+            "name": "Mempool.space (web launcher)",
+            "version": "1.0",
+            "size_mb": 1,
+            "external_commands": [
+              "cp dotfiles/dotdesktop/mempool_space.desktop shared_with_chroot/",
+              "cp dotfiles/logos/mempool_space.png shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "cp /tmp/mempool_space.desktop /usr/share/applications/",
+              "mkdir -p /opt/logos/",
+              "cp /tmp/mempool_space.png /opt/logos/"
+            ]
+          },
+          {
+            "name": "BIP39 (iancoleman) offline",
+            "version": "0.5.4",
+            "size_mb": 4.34,
+            "external_commands": [
+              "wget -q https://github.com/iancoleman/bip39/releases/download/{version}/bip39-standalone.html -P shared_with_chroot",
+              "cp dotfiles/dotdesktop/bip39ian.desktop shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "cp /tmp/bip39-standalone.html /etc/skel/"
+            ]
+          },
+          {
+            "name": "Seedtool (offline)",
+            "version": "2.2.0",
+            "size_mb": 6.58,
+            "external_commands": [
+              "wget -q -O shared_with_chroot/seedtool.html https://github.com/BitcoinQnA/seedtool/releases/download/{version}/index.html",
+              "cp dotfiles/dotdesktop/seedtool.desktop shared_with_chroot/",
+              "cp dotfiles/logos/seedtool.png shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "cp /tmp/seedtool.html /etc/skel/"
+            ]
+          },
+          {
+            "name": "Border Wallets (offline)",
+            "version": "1.0.5",
+            "size_mb": 1.59,
+            "external_commands": [
+              "wget -q -O shared_with_chroot/borderwallet.html https://github.com/microchad/borderwallets/releases/download/{version}/borderwallets.html",
+              "cp dotfiles/dotdesktop/borderwallet.desktop shared_with_chroot/",
+              "cp dotfiles/logos/borderwallet.svg shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "cp /tmp/borderwallet.html /etc/skel/"
+            ]
+          },
+          {
+            "name": "Hodl Hodl (web launcher)",
+            "version": "1.0",
+            "size_mb": 1,
+            "external_commands": [
+              "cp dotfiles/dotdesktop/hodlhodl.desktop shared_with_chroot/",
+              "cp dotfiles/logos/hodlhodl.png shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "cp /tmp/hodlhodl.desktop /usr/share/applications/",
+              "mkdir -p /opt/logos/",
+              "cp /tmp/hodlhodl.png /opt/logos/"
+            ]
+          },
+          {
+            "name": "RoboSats (web launcher)",
+            "version": "1.0",
+            "size_mb": 1,
+            "external_commands": [
+              "cp dotfiles/dotdesktop/robosats.desktop shared_with_chroot/",
+              "cp dotfiles/logos/robosats.png shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "cp /tmp/robosats.desktop /usr/share/applications/",
+              "mkdir -p /opt/logos/",
+              "cp /tmp/robosats.png /opt/logos/"
+            ]
+          },
+          {
+            "name": "Bitcoin Knots",
+            "version": "29.2",
+            "size_mb": 106,
+            "external_commands": [
+              "wget -q https://bitcoinknots.org/files/29.x/{version}.knots20251110/bitcoin-{version}.knots20251110-x86_64-linux-gnu.tar.gz https://raw.githubusercontent.com/bitcoinknots/bitcoin/master/share/pixmaps/bitcoin256.png -P shared_with_chroot",
+              "cp dotfiles/dotdesktop/bitcoinknots.desktop shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "mkdir -p /opt/bitcoinknots/",
+              "cp /tmp/bitcoin256.png /opt/bitcoinknots/bitcoin256.png",
+              "cp /tmp/bitcoinknots.desktop /usr/share/applications/",
+              "tar xzf /tmp/bitcoin-{version}.knots20251110-x86_64-linux-gnu.tar.gz -C /opt/bitcoinknots --strip-components=1"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "nostr",
+        "title": "Nostr",
+        "icon": "img/nostr.png",
+        "menu_file": "Nostr.menu",
+        "items": [
+          {
+            "name": "Rana (Nostr pubkeys mining)",
+            "version": "0.5.5",
+            "size_mb": 1.46,
+            "external_commands": [
+              "wget -q -O shared_with_chroot/rana.tar.gz https://github.com/grunch/rana/releases/download/v{version}/rana-x86_64-unknown-linux-musl.tar.gz",
+              "cp dotfiles/dotdesktop/rana.desktop shared_with_chroot/",
+              "cp dotfiles/logos/rana.png shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "mkdir -p /opt/rana/",
+              "cp /tmp/rana.desktop /usr/share/applications/",
+              "tar xvf /tmp/rana.tar.gz -C /opt/rana/ --strip-components=1",
+              "cp /tmp/rana.png /opt/rana/",
+              "ln -s /opt/rana/rana /usr/bin || true"
+            ]
+          },
+          {
+            "name": "Snort (web launcher)",
+            "version": "1.0",
+            "size_mb": 1,
+            "external_commands": [
+              "cp dotfiles/dotdesktop/snort.desktop shared_with_chroot/",
+              "cp dotfiles/logos/snort.png shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "cp /tmp/snort.desktop /usr/share/applications/",
+              "mkdir -p /opt/logos/",
+              "cp /tmp/snort.png /opt/logos/"
+            ]
+          },
+          {
+            "name": "Iris.to (web launcher)",
+            "version": "1.0",
+            "size_mb": 1,
+            "external_commands": [
+              "cp dotfiles/dotdesktop/iris_to.desktop shared_with_chroot/",
+              "cp dotfiles/logos/iris_to.png shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "cp /tmp/iris_to.desktop /usr/share/applications/",
+              "mkdir -p /opt/logos/",
+              "cp /tmp/iris_to.png /opt/logos/"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "monero",
+        "title": "Monero",
+        "icon": "img/monero.svg",
+        "menu_file": "Monero.menu",
+        "items": [
+          {
+            "name": "Feather Wallet",
+            "version": "2.8.1",
+            "size_mb": 80,
+            "external_commands": [
+              "wget -q https://featherwallet.org/files/releases/linux-appimage/feather-{version}.AppImage -P shared_with_chroot",
+              "wget -q https://featherwallet.org/img/feather.png -P shared_with_chroot",
+              "cp dotfiles/dotdesktop/featherwallet.desktop shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "mkdir -p /opt/feather/",
+              "cp /tmp/feather.png /opt/feather/feather.png",
+              "cp /tmp/feather-{version}.AppImage /opt/feather/feather.AppImage",
+              "chmod +x /opt/feather/feather.AppImage",
+              "cp /tmp/featherwallet.desktop /usr/share/applications/"
+            ]
+          },
+          {
+            "name": "Cake Wallet",
+            "version": "5.1.2",
+            "size_mb": 140,
+            "external_commands": [
+              "wget -q -O shared_with_chroot/cake.tar.xz https://github.com/cake-tech/cake_wallet/releases/download/v{version}/Cake_Wallet_v5.1.2_Linux.tar.xz",
+              "cp dotfiles/dotdesktop/cakewallet.desktop shared_with_chroot/"
+            ],
+            "internal_commands": [
+              "mkdir -p /opt/cakewallet/",
+              "tar xf /tmp/cake.tar.xz -C /opt/cakewallet --strip-components=1",
+              "cp /tmp/cakewallet.desktop /usr/share/applications/"
+            ]
+          }
+        ]
+      },
+      {
+        "key": "communication",
+        "title": "Communication",
+        "icon": "img/xmpp.svg",
+        "menu_file": "Communication.menu",
+        "items": [
+          {
+            "name": "Briar (desktop)",
+            "version": "bullseye",
+            "size_mb": 221,
+            "external_commands": [
+              "wget -q https://desktop.briarproject.org/debs/{version}/briar-desktop-debian-{version}.deb -P shared_with_chroot"
+            ],
+            "internal_commands": [
+              "dpkg -i /tmp/briar-desktop-debian-bullseye.deb",
+              "sed -i \"s/^Categories=.*/Categories=Network;Chat;InstantMessaging;Communication;/\" /usr/share/applications/org.briarproject.Briar.desktop"
+            ]
+          },
+          {
+            "name": "SimpleX Chat (desktop)",
+            "version": "6.4.0",
+            "size_mb": 249,
+            "external_commands": [
+              "wget -q https://github.com/simplex-chat/simplex-chat/releases/download/v{version}/simplex-desktop-ubuntu-22_04-x86_64.deb -P shared_with_chroot"
+            ],
+            "internal_commands": [
+              "dpkg -i /tmp/simplex-desktop-ubuntu-22_04-x86_64.deb",
+              "sed -i 's/Categories=Unknown/Categories=Communication/' /usr/share/applications/simplex-simplex.desktop"
+            ]
+          }
+        ]
+      }
     ]
+  },
+  "remove_software": [
+    {
+      "name": "Thunderbird",
+      "internal_commands": "dpkg -r --force-depends thunderbird",
+      "size": "220 MB"
+    },
+    {
+      "name": "GIMP",
+      "internal_commands": "dpkg -r --force-depends gimp",
+      "size": "160 MB"
+    }
+  ],
+  "clean_system": {
+    "message": "This will perform system cleanup and mark the intro as seen.",
+    "commands": [
+      "sed -i 's/\\\"saw\\\"[[:space:]]*:[[:space:]]*true/\\\"saw\\\": false/' options.json",
+      "sudo rm -rf shared_with_chroot/ system_to_edit/ iso_mounted/ future_iso/ squashfs-root/ mount_p/"
+    ]
+  }
 }
