@@ -66,6 +66,8 @@ You can also modify the version manually.
 
 ## Compare two images by hashing every file in the live filesystem
 <img width="500" src="https://github.com/user-attachments/assets/2038d9e7-6870-4572-8861-33ce51e4c977" />
+<br><br>
+<img width="600" alt="Screenshot_2025-12-03_21-08-20" src="https://github.com/user-attachments/assets/11807492-086b-4c62-8ad1-4e778802c128" />
 
 
 ## <a href="https://iris.to/note1v84se28tgghf78c3gn7qtflywgau9atcwva4fvgnu33mpxhq2jgs28lhuw">GPG Key</a>
