@@ -145,8 +145,7 @@ def _flash_future_iso_direct_to_device(device_path: str, sink: Optional[Sink], c
         content_bytes = int(out_sz)
     except Exception:
         content_bytes = 0
-    buffer_bytes = 0
-    #buffer_bytes = 200 * 1024 * 1024
+    buffer_bytes = 10 * 1024 * 1024
     part_bytes = content_bytes + buffer_bytes
     one_mib = 1024 * 1024
     part_mib = (part_bytes + one_mib - 1) // one_mib
@@ -361,8 +360,7 @@ def _build_img_from_future_iso(sink: Optional[Sink], cwd: str, out_name: str = "
     # Compute required sizes
     content_bytes = int(subprocess.check_output(["du", "-sb", "future_iso"], text=True, cwd=cwd).split()[0])
     # Add custom space to the partition
-    buffer_bytes = 0
-    #buffer_bytes = 200 * 1024 * 1024
+    buffer_bytes = 10 * 1024 * 1024
     part_bytes = content_bytes + buffer_bytes
     one_mib = 1024 * 1024
     img_bytes = part_bytes + (2 * one_mib)
