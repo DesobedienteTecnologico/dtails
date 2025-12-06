@@ -28,7 +28,7 @@
           },
           {
             "name": "Sparrow Wallet",
-            "version": "2.2.3",
+            "version": "2.3.1",
             "size_mb": 106,
             "external_commands": [
               "wget -q https://github.com/sparrowwallet/sparrow/releases/download/{version}/sparrowwallet-{version}-x86_64.tar.gz -P shared_with_chroot",
