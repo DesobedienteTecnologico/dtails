@@ -24,14 +24,14 @@
 
 # About
 
-DTails lets you take a base Debian Live image, add or remove carefully curated tools, and build a new image you can independently verify. No hidden network or opaque calls — just explicit scripts and logs.
+DTails tool lets you take a base Debian Live image, add or remove carefully curated tools, and build a new image you can independently verify. No hidden network or opaque calls — just explicit scripts and logs.
 
 [DTailsOS](https://huggingface.co/datasets/DTailsOS/DTailsOS/tree/main) is the fork of Tails.
 
 ## Packages requirements
 
 ```bash
-sudo apt install rsync squashfs-tools genisoimage syslinux-utils dosfstools parted build-essential python3-pyqt5
+sudo apt install rsync squashfs-tools xorriso genisoimage syslinux-utils dosfstools mtools parted gdisk build-essential python3-pyqt5 gpg
 ```
 
 ## Getting started
@@ -63,6 +63,42 @@ You can also modify the version manually.
 * ℹ️ You will need to type the sudo password in your terminal
 <img width="500" src="https://github.com/user-attachments/assets/37f61098-a33a-44e6-9b54-1916a75750c5" />
 
+
+## Reproducibility
+
+DTails aims for **bit-for-bit reproducible** images: the same base image + the
+same software selection should produce the same output hash on any machine.
+
+### Verifying
+
+Build the same image twice and compare:
+
+```bash
+sha256sum DTails.img     # or DTails.iso — the two runs must produce the same hash
+```
+
+You can also check/share the file **DTails.img.manifest.txt** created after every build.
+
+For a content-level check (file-by-file inside the live filesystem), use the
+**Compare Images** dialog in the GUI, which mounts both inputs, unsquashes them
+and reports any differing/missing files.
+
+### Verifying a flashed device
+
+The **Compare Images** dialog also accepts a **device** on either side (pick
+"All files" and select the node, e.g. `/dev/sdb`). It mounts the device's FAT
+partition **read-only** — so verification never alters the device — and compares
+its live filesystem against the source `.iso`/`.img`. This works for both a
+`dd`-flashed image and a directly-flashed device, and across USB sticks of
+different sizes (it compares filesystem *content*, not raw bytes).
+
+If you flashed with `dd` and want a raw byte check of the whole image, compare
+the first *image-sized* bytes of the device against the source:
+
+```bash
+sz=$(stat -c%s DTails.img)
+sudo cmp -n "$sz" DTails.img /dev/sdX && echo "device matches image"
+```
 
 ## Compare two images by hashing every file in the live filesystem
 <img width="500" src="https://github.com/user-attachments/assets/2038d9e7-6870-4572-8861-33ce51e4c977" />

@@ -33,6 +33,29 @@ from PyQt5.QtWidgets import (
 from src.state import AppState, load_options, save_options
 from src.theme import apply_theme
 from src.compare_images import ImageCompareDialog
+from src import tails_download as td
+
+_REPO = Path(__file__).resolve().parents[1]
+
+
+class TailsWorker(QThread):
+    """Runs a download/verify function off the UI thread. `fn(progress_cb)` must
+    return (ok: bool, message: str); progress_cb takes (done_bytes, total_bytes)."""
+    progress = pyqtSignal(int)            # percent 0..100
+    done = pyqtSignal(bool, str)
+
+    def __init__(self, fn, parent=None):
+        super().__init__(parent)
+        self._fn = fn
+
+    def run(self):
+        def cb(done, total):
+            self.progress.emit(int(done * 100 / total) if total else 0)
+        try:
+            ok, msg = self._fn(cb)
+            self.done.emit(bool(ok), msg)
+        except Exception as e:
+            self.done.emit(False, str(e))
 
 # ---------- helpers: widgets ----------
 
@@ -635,13 +658,104 @@ class StartTab(QWidget):
             win.summary_tab.refresh()
 
     def select_image(self):
+        opts = ["Browse for a local file…",
+                "Download the latest Tails image…",
+                "Verify an image (SHA256 + GPG)…"]
+        prompt = ("Choose image source:\n\n"
+                  "You can also download and verify images on the official Tails site:\n"
+                  "https://tails.net/install/download/index.en.html")
+        choice, ok = QInputDialog.getItem(self, "Image", prompt, opts, 0, False)
+        if not ok:
+            return
+        if choice == opts[0]:
+            self._browse_image()
+        elif choice == opts[1]:
+            self._download_image()
+        else:
+            self._verify_image()
+
+    def _set_image(self, path: str):
+        self.state.selected_image = path
+        self.btn_image.setText(Path(path).name)
+        self.btn_storage.setEnabled(True)
+        self._refresh_summary_if_present()
+
+    def _browse_image(self):
         file_filter = "Image Files (*.iso *.img);;All Files (*)"
         path, _ = QFileDialog.getOpenFileName(self, "Select Image File", "", file_filter)
         if path:
-            self.state.selected_image = path
-            self.btn_image.setText(Path(path).name)
-            self.btn_storage.setEnabled(True)
-            self._refresh_summary_if_present()
+            self._set_image(path)
+
+    def _download_image(self):
+        try:
+            rel = td.fetch_release()
+        except Exception as e:
+            QMessageBox.critical(self, "Download", f"Could not fetch release info:\n{e}")
+            return
+        items = [
+            f"USB image  tails-amd64-{rel['version']}.img  ({(rel['img']['size'] or 0)//(1024*1024)} MB)",
+            f"ISO image  tails-amd64-{rel['version']}.iso  ({(rel['iso']['size'] or 0)//(1024*1024)} MB)",
+        ]
+        choice, ok = QInputDialog.getItem(
+            self, f"Download Tails {rel['version']}", "Choose image:", items, 0, False)
+        if not ok:
+            return
+        entry = rel["img"] if choice.startswith("USB") else rel["iso"]
+        dest = str(_REPO / entry["filename"])
+        if os.path.exists(dest) and QMessageBox.question(
+                self, "Overwrite?",
+                f"{entry['filename']} already exists.\nRe-download it?") != QMessageBox.Yes:
+            return
+
+        dlg = QProgressDialog(f"Downloading {entry['filename']}…", None, 0, 100, self)
+        dlg.setWindowModality(Qt.WindowModal)
+        dlg.setCancelButton(None)
+        dlg.setMinimumDuration(0)
+        dlg.setValue(0)
+        self._dl_worker = TailsWorker(
+            lambda cb: (td.download(entry["url"], dest, cb, entry["size"]), (True, dest))[1])
+        self._dl_worker.progress.connect(dlg.setValue)
+
+        def on_done(ok_, msg):
+            dlg.close()
+            if not ok_:
+                QMessageBox.critical(self, "Download failed", msg)
+                return
+            self._set_image(dest)
+            if QMessageBox.question(self, "Verify?",
+                                    "Download complete.\nVerify SHA256 + GPG signature now?"
+                                    ) == QMessageBox.Yes:
+                self._run_verify(dest, rel)
+        self._dl_worker.done.connect(on_done)
+        self._dl_worker.start()
+        dlg.exec_()
+
+    def _verify_image(self):
+        start = self.state.selected_image or str(_REPO)
+        path, _ = QFileDialog.getOpenFileName(
+            self, "Select image to verify", start, "Image Files (*.iso *.img);;All Files (*)")
+        if path:
+            self._run_verify(path)
+
+    def _run_verify(self, path: str, rel=None):
+        dlg = QProgressDialog(f"Verifying {Path(path).name}…", None, 0, 100, self)
+        dlg.setWindowModality(Qt.WindowModal)
+        dlg.setCancelButton(None)
+        dlg.setValue(0)
+        self._vf_worker = TailsWorker(lambda cb: td.verify_image(path, release=rel, progress_cb=cb))
+        self._vf_worker.progress.connect(dlg.setValue)
+
+        def on_done(ok_, report):
+            dlg.close()
+            box = QMessageBox(self)
+            box.setIcon(QMessageBox.Information if ok_ else QMessageBox.Critical)
+            box.setWindowTitle("Verified" if ok_ else "NOT verified")
+            box.setText("✔ VERIFIED" if ok_ else "✘ NOT VERIFIED")
+            box.setDetailedText(report)
+            box.exec_()
+        self._vf_worker.done.connect(on_done)
+        self._vf_worker.start()
+        dlg.exec_()
 
     def pick_storage(self):
         choose_block_device(self.on_device_chosen)

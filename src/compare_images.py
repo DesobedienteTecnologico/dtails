@@ -1,4 +1,5 @@
 import os
+import stat
 import subprocess
 import hashlib
 import shutil
@@ -38,6 +39,29 @@ class ImageCompareWorker(QThread):
     def _is_img(self, p: str) -> bool:
         return p.lower().endswith(".img")
 
+    def _is_block_device(self, p: str) -> bool:
+        try:
+            return stat.S_ISBLK(os.stat(p).st_mode)
+        except OSError:
+            return False
+
+    def _fat_partition(self, dev: str) -> str:
+        """For a whole-disk device (e.g. /dev/sdb) return its first partition
+        (/dev/sdb1); if it is already a partition or has no table, return it
+        unchanged."""
+        try:
+            out = subprocess.check_output(
+                ["lsblk", "-ln", "-o", "PATH,TYPE", dev], text=True
+            )
+        except Exception:
+            return dev
+        parts = [
+            cols[0]
+            for cols in (ln.split() for ln in out.splitlines())
+            if len(cols) >= 2 and cols[1] == "part"
+        ]
+        return parts[0] if parts else dev
+
     def _run(self, cmd: str, timeout: int = 1800) -> None:
         try:
             completed = subprocess.run(
@@ -59,10 +83,16 @@ class ImageCompareWorker(QThread):
     def _mount_image(self, image: str, mount_dir: str) -> None:
         as_root = (os.geteuid() == 0)
         sudo = "" if as_root else "sudo "
-        if self._is_iso(image):
-            self._run(f"{sudo}mount -o loop '{image}' '{mount_dir}'", timeout=120)
+        # Mount read-only so verifying a device never alters its bytes (and thus
+        # its hash).
+        if self._is_block_device(image):
+            # A flashed USB/SD: mount its FAT partition directly.
+            part = self._fat_partition(image)
+            self._run(f"{sudo}mount -o ro '{part}' '{mount_dir}'", timeout=120)
+        elif self._is_iso(image):
+            self._run(f"{sudo}mount -o ro,loop '{image}' '{mount_dir}'", timeout=120)
         elif self._is_img(image):
-            self._run(f"{sudo}mount -o loop,offset=1048576 '{image}' '{mount_dir}'", timeout=120)
+            self._run(f"{sudo}mount -o ro,loop,offset=1048576 '{image}' '{mount_dir}'", timeout=120)
         else:
             raise RuntimeError(f"Unsupported image: {image}")
 
@@ -608,7 +638,7 @@ class ImageCompareDialog(QDialog):
         # Column 1: Image A
         colA = QVBoxLayout()
         colA.setSpacing(6)
-        lblA_title = QLabel("Image A (.iso / .img)")
+        lblA_title = QLabel("Image A (.iso / .img / device)")
         lblA_title.setAlignment(Qt.AlignCenter)
         lblA_title.setStyleSheet("font-size:13px; color:#888;")
         colA.addWidget(lblA_title)
@@ -624,7 +654,7 @@ class ImageCompareDialog(QDialog):
         # Column 2: Image B
         colB = QVBoxLayout()
         colB.setSpacing(6)
-        lblB_title = QLabel("Image B (.iso / .img)")
+        lblB_title = QLabel("Image B (.iso / .img / device)")
         lblB_title.setAlignment(Qt.AlignCenter)
         lblB_title.setStyleSheet("font-size:13px; color:#888;")
         colB.addWidget(lblB_title)
@@ -656,8 +686,10 @@ class ImageCompareDialog(QDialog):
 
         # Description
         desc = QLabel(
-            "This will mount both images, extract their squashfs contents, list ALL entries (files, dirs, symlinks), "
-            "hash regular files, and generate a JSON + HTML report showing matches, differences, and missing files."
+            "This will mount both inputs, extract their squashfs contents, list ALL entries (files, dirs, symlinks), "
+            "hash regular files, and generate a JSON + HTML report showing matches, differences, and missing files. "
+            "Either side may be an .iso/.img file or a flashed device (e.g. /dev/sdb) — pick \"All files\" and select "
+            "the device node to verify a written USB/SD against its source image."
         )
         desc.setWordWrap(True)
         desc.setAlignment(Qt.AlignCenter)
