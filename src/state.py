@@ -1,10 +1,16 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 import json
+import re
 from typing import Dict, List, Optional, Tuple, Any, Iterable
 
 
 OPTIONS_PATH = (Path(__file__).resolve().parents[1] / "options.json").resolve()
+
+# Version overrides are spliced into shell commands (runner.py's _render_cmds)
+# that run on the host and as root inside the chroot, so only plain version
+# strings are accepted — no shell metacharacters.
+_VERSION_RE = re.compile(r"^[A-Za-z0-9._-]+$")
 
 def load_options(parent=None) -> Dict[str, Any]:
     from PyQt5.QtWidgets import QMessageBox
@@ -180,8 +186,10 @@ class AppState:
 
     @property
     def device_label(self) -> str:
-        if not self.selected_device:
+        if self.selected_device is None:
             return "— not selected —"
+        if not self.selected_device:
+            return "— none (image-only build) —"
         vendor = self.selected_device.get("vendor") or ""
         model = self.selected_device.get("model") or self.selected_device.get("name", "")
         size = self.selected_device.get("size") or ""
@@ -238,7 +246,7 @@ class AppState:
 
 
     def ready_to_write(self) -> bool:
-        return bool(self.selected_image and self.selected_device)
+        return bool(self.selected_image) and self.selected_device is not None
 
     def _image_size_bytes(self) -> Optional[int]:
         try:
@@ -267,11 +275,17 @@ class AppState:
         v = (it.get("version") or "").strip()
         return v or None
 
-    def set_version_override(self, name: str, version: str) -> None:
+    def set_version_override(self, name: str, version: str) -> bool:
+        """Store a version override for `name`. Returns False (and leaves any
+        existing override untouched) if `version` isn't a plain version
+        string, since it is later spliced into shell commands run as root."""
         if not name:
-            return
+            return False
         version = (version or "").strip()
-        if version:
-            self.version_overrides[name] = version
-        else:
+        if not version:
             self.version_overrides.pop(name, None)
+            return True
+        if not _VERSION_RE.match(version):
+            return False
+        self.version_overrides[name] = version
+        return True

@@ -113,7 +113,9 @@
               "cp dotfiles/dotdesktop/bip39ian.desktop shared_with_chroot/"
             ],
             "internal_commands": [
-              "cp /tmp/bip39-standalone.html /etc/skel/"
+              "cp /tmp/bip39ian.desktop /usr/share/applications/",
+              "mkdir -p /etc/skel/Documents/",
+              "cp /tmp/bip39-standalone.html /etc/skel/Documents/"
             ]
           },
           {
@@ -126,7 +128,11 @@
               "cp dotfiles/logos/seedtool.png shared_with_chroot/"
             ],
             "internal_commands": [
-              "cp /tmp/seedtool.html /etc/skel/"
+              "cp /tmp/seedtool.desktop /usr/share/applications/",
+              "mkdir -p /etc/skel/Documents/",
+              "cp /tmp/seedtool.html /etc/skel/Documents/",
+              "mkdir -p /opt/logos/",
+              "cp /tmp/seedtool.png /opt/logos/"
             ]
           },
           {
@@ -139,7 +145,11 @@
               "cp dotfiles/logos/borderwallet.svg shared_with_chroot/"
             ],
             "internal_commands": [
-              "cp /tmp/borderwallet.html /etc/skel/"
+              "cp /tmp/borderwallet.desktop /usr/share/applications/",
+              "mkdir -p /etc/skel/Documents/",
+              "cp /tmp/borderwallet.html /etc/skel/Documents/",
+              "mkdir -p /opt/logos/",
+              "cp /tmp/borderwallet.svg /opt/logos/"
             ]
           },
           {

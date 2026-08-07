@@ -1,7 +1,7 @@
 [Desktop Entry]
 Comment=A web tool for converting BIP39 mnemonic codes
 Name=BIP39 iancoleman
-Exec=/usr/local/bin/tor-browser /opt/bip39-standalone.html
+Exec=/usr/local/bin/tor-browser /home/amnesia/Documents/bip39-standalone.html
 Icon=/usr/share/icons/Adwaita/scalable/mimetypes/application-certificate.svg
 Categories=Bitcoin;
 StartupNotify=true
