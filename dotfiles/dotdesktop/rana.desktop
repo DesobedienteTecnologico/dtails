@@ -1,7 +1,7 @@
 [Desktop Entry]
 Comment=Rana mining tool
 Name=Rana
-Exec=gnome-terminal -- bash -c "/opt/rana/./rana --help; exec bash"
+Exec=kgx
 Icon=/opt/rana/rana.png
 Categories=Network;Nostr;
 StartupNotify=true

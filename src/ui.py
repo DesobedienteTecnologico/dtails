@@ -596,8 +596,13 @@ class InstallItemWidget(QWidget):
         cur = self.state.get_effective_version(name) or (self.item.get("version") or "")
         text, ok = QInputDialog.getText(self, f"{name}", "Version:", text=cur)
         if ok:
-            self.state.set_version_override(name, text)
-            self.version_lbl.setText(f"v{text}" if text.strip() else "")
+            if not self.state.set_version_override(name, text):
+                QMessageBox.warning(
+                    self, "Invalid version",
+                    "Version may only contain letters, digits, '.', '_' and '-'.",
+                )
+                return
+            self.version_lbl.setText(f"v{text.strip()}" if text.strip() else "")
 
 # ---------- tabs ----------
 
@@ -758,14 +763,27 @@ class StartTab(QWidget):
         dlg.exec_()
 
     def pick_storage(self):
-        choose_block_device(self.on_device_chosen)
+        opts = ["No — just build a DTails.img file",
+                "Yes — choose a device to flash directly"]
+        choice, ok = QInputDialog.getItem(
+            self, "Storage", "Flash the result to a physical device?", opts, 0, False)
+        if not ok:
+            return
+        if choice == opts[0]:
+            self.on_device_chosen({})
+        else:
+            choose_block_device(self.on_device_chosen)
 
     def on_device_chosen(self, dev: dict):
-        self.state.selected_device = dev or {}
-        vendor = dev.get("vendor") or ""
-        model = dev.get("model") or dev.get("name", "")
-        size = dev.get("size") or ""
-        text = " ".join(x for x in (vendor, size, model) if x).strip() or "Storage selected"
+        dev = dev or {}
+        self.state.selected_device = dev
+        if not dev:
+            text = "Image-only build (no device)"
+        else:
+            vendor = dev.get("vendor") or ""
+            model = dev.get("model") or dev.get("name", "")
+            size = dev.get("size") or ""
+            text = " ".join(x for x in (vendor, size, model) if x).strip() or "Storage selected"
         self.btn_storage.setText(text)
         self.btn_manage.setEnabled(True)
         self._refresh_summary_if_present()
@@ -866,12 +884,11 @@ class InstallTab(QWidget):
             v.setContentsMargins(8, 8, 8, 8)
             v.addWidget(QLabel(f"Select {title} software to install"))
             lw = QListWidget()
-            lw.setSelectionMode(QListWidget.MultiSelection)
+            lw.setSelectionMode(QListWidget.NoSelection)
             v.addWidget(lw)
             idx = self.tabs.addTab(w, QIcon(), "")
             self._inject_tab_header(idx, title, icon_path)
             self._lists_by_key[key] = lw
-            lw.itemSelectionChanged.connect(self._update_next_enabled)
             self._fill_list_for_category(lw, items)
 
         self.tabs.setCurrentIndex(0)
@@ -919,23 +936,21 @@ class InstallTab(QWidget):
         """)
 
     def _on_toggle_item(self, list_widget: QListWidget, name: str, checked: bool):
-        items = list_widget.findItems(name, Qt.MatchExactly)
-        if not items:
-            for i in range(list_widget.count()):
-                it = list_widget.item(i)
-                if (it.data(Qt.UserRole) or it.text()) == name:
-                    items = [it]; break
-        if not items:
-            return
-        it = items[0]
-        it.setSelected(checked)
+        self._update_next_enabled()
+
+    def _checked_names(self, lw: QListWidget) -> List[str]:
+        names: List[str] = []
+        for i in range(lw.count()):
+            it = lw.item(i)
+            w = lw.itemWidget(it)
+            if w is not None and w.chk.isChecked():
+                names.append(it.data(Qt.UserRole) or it.text())
+        return names
 
     def _collect_and_next(self) -> None:
         selected: List[str] = []
         for lw in self._lists_by_key.values():
-            for it in lw.selectedItems():
-                name = it.data(Qt.UserRole) or it.text()
-                selected.append(name)
+            selected.extend(self._checked_names(lw))
 
         if not selected:
             QMessageBox.warning(
@@ -952,11 +967,7 @@ class InstallTab(QWidget):
 
 
     def _update_next_enabled(self) -> None:
-        any_selected = False
-        for lw in self._lists_by_key.values():
-            if lw.selectedItems():
-                any_selected = True
-                break
+        any_selected = any(self._checked_names(lw) for lw in self._lists_by_key.values())
         if getattr(self, "next_btn", None):
             self.next_btn.setEnabled(any_selected)
 
@@ -1009,7 +1020,7 @@ class RemoveTab(QWidget):
         v.addWidget(QLabel("Select the software to be removed (optional)"))
 
         self.list = QListWidget()
-        self.list.setSelectionMode(QListWidget.MultiSelection)
+        self.list.setSelectionMode(QListWidget.NoSelection)
         self.list.setSpacing(6)
         self.list.setStyleSheet("""
             QListWidget{ padding:8px; }
@@ -1020,16 +1031,7 @@ class RemoveTab(QWidget):
         v.addLayout(make_nav_buttons(go_back, self._proceed))
 
     def _on_toggle_item(self, name: str, checked: bool):
-        items = []
-        for i in range(self.list.count()):
-            it = self.list.item(i)
-            if (it.data(Qt.UserRole) or it.text()) == name:
-                items = [it]
-                break
-        if not items:
-            return
-        it = items[0]
-        it.setSelected(checked)
+        pass
 
     def _add_item(self, name: str, size_bytes: Optional[int]) -> None:
         row_widget = RemoveItemWidget(name, size_bytes, on_toggle=self._on_toggle_item)
@@ -1053,8 +1055,11 @@ class RemoveTab(QWidget):
 
     def _proceed(self) -> None:
         selected = []
-        for it in self.list.selectedItems():
-            selected.append(it.data(Qt.UserRole) or it.text())
+        for i in range(self.list.count()):
+            it = self.list.item(i)
+            w = self.list.itemWidget(it)
+            if w is not None and w.chk.isChecked():
+                selected.append(it.data(Qt.UserRole) or it.text())
         self.state.selected_deletions = selected
         self._go_next()
 
@@ -1264,7 +1269,7 @@ class MainWindow(QMainWindow):
 
     def _on_write_image(self):
         if not self.state.ready_to_write():
-            QMessageBox.warning(self, "Incomplete", "Please select an image and a device.")
+            QMessageBox.warning(self, "Incomplete", "Please select an image and a storage option.")
             return
 
         add_ct = len(self.state.selected_additions)
@@ -1279,6 +1284,7 @@ class MainWindow(QMainWindow):
             return
 
         dlg = LiveLogDialog(self)
+        dlg.setWindowModality(Qt.WindowModal)
         dlg.accepted.connect(self._on_log_dialog_closed)
         dlg.show()
 
@@ -1287,7 +1293,9 @@ class MainWindow(QMainWindow):
         def _on_done(code: int):
             dlg.append_text.emit(f"\n[INFO] Job finished with code {code}.\n")
             log_file = os.path.join(os.getcwd(), "log.txt")
-            QMessageBox.information(self, "Done", f"Write job completed.\n\nLog saved to:\n{log_file}")
+            QMessageBox.information(dlg, "Done", f"Write job completed.\n\nLog saved to:\n{log_file}")
+            dlg.raise_()
+            dlg.activateWindow()
         self._log_worker.finished_code.connect(_on_done)
         self._log_worker.start()
 

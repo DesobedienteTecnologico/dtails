@@ -26,7 +26,7 @@
 
 DTails tool lets you take a base Debian Live image, add or remove carefully curated tools, and build a new image you can independently verify. No hidden network or opaque calls — just explicit scripts and logs.
 
-[DTailsOS](https://huggingface.co/datasets/DTailsOS/DTailsOS/tree/main) is the fork of Tails.
+[DTailsOS](https://dtails.gitlab.io) is the fork of Tails.
 
 ## Packages requirements
 
