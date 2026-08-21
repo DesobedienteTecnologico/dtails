@@ -28,7 +28,7 @@
           },
           {
             "name": "Sparrow Wallet",
-            "version": "2.5.2",
+            "version": "2.5.3",
             "size_mb": 98.2,
             "external_commands": [
               "wget -q https://github.com/sparrowwallet/sparrow/releases/download/{version}/sparrowwallet-{version}-x86_64.tar.gz -P shared_with_chroot",
@@ -41,7 +41,7 @@
           },
           {
             "name": "Specter Desktop",
-            "version": "2.1.10",
+            "version": "2.1.11",
             "size_mb": 112,
             "external_commands": [
               "wget -q https://github.com/cryptoadvance/specter-desktop/releases/download/v{version}/specter_desktop-v{version}-x86_64-linux-gnu.tar.gz -P shared_with_chroot",
@@ -64,7 +64,7 @@
           },
           {
             "name": "Bisq",
-            "version": "1.10.3",
+            "version": "1.10.5",
             "size_mb": 413,
             "external_commands": [
               "wget -q https://bisq.network/downloads/v{version}/Bisq-64bit-{version}.deb -P shared_with_chroot",
@@ -77,7 +77,7 @@
           },
           {
             "name": "Liana Wallet",
-            "version": "14.0",
+            "version": "15.0",
             "size_mb": 24.6,
             "external_commands": [
               "wget -q https://github.com/wizardsardine/liana/releases/download/v{version}/liana-{version}-x86_64-linux-gnu.tar.gz -P shared_with_chroot",
@@ -182,7 +182,7 @@
           },
           {
             "name": "Bitcoin Knots",
-            "version": "29.3.knots20260508",
+            "version": "29.4.knots20260508",
             "size_mb": 51,
             "external_commands": [
               "wget -q https://bitcoinknots.org/files/29.x/{version}/bitcoin-{version}-x86_64-linux-gnu.tar.gz https://raw.githubusercontent.com/bitcoinknots/bitcoin/master/share/pixmaps/bitcoin256.png -P shared_with_chroot",
@@ -275,7 +275,7 @@
           },
           {
             "name": "Cake Wallet",
-            "version": "6.2.1",
+            "version": "6.4.1",
             "size_mb": 97.7,
             "external_commands": [
               "wget -q -O shared_with_chroot/cake.tar.xz https://github.com/cake-tech/cake_wallet/releases/download/v{version}/Cake_Wallet_v5.1.2_Linux.tar.xz",
@@ -309,7 +309,7 @@
           },
           {
             "name": "SimpleX Chat (desktop)",
-            "version": "6.5.6",
+            "version": "7.0.1",
             "size_mb": 305,
             "external_commands": [
               "wget -q https://github.com/simplex-chat/simplex-chat/releases/download/v{version}/simplex-desktop-ubuntu-22_04-x86_64.deb -P shared_with_chroot"
@@ -324,11 +324,6 @@
     ]
   },
   "remove_software": [
-    {
-      "name": "Thunderbird",
-      "internal_commands": "dpkg -r --force-depends thunderbird",
-      "size": "220 MB"
-    },
     {
       "name": "GIMP",
       "internal_commands": "dpkg -r --force-depends gimp",
