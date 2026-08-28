@@ -217,7 +217,7 @@ def _build_iso(sink: Optional[Sink], cwd: str, epoch: int) -> None:
             sink, cwd
         )
     # Fix the MBR disk id so the hybrid image is also deterministic.
-    _run_stream(f"isohybrid --id {serial} DTails.iso", sink, cwd)
+    _run_stream(f"sudo isohybrid --id 0x{serial} DTails.iso", sink, cwd)
     _emit(sink, "[INFO] DTails.iso image created.\n")
 
 
