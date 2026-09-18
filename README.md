@@ -30,9 +30,20 @@ DTails tool lets you take a base Debian Live image, add or remove carefully cura
 
 ## Packages requirements
 
+
 ```bash
-sudo apt install rsync squashfs-tools xorriso genisoimage syslinux-utils dosfstools mtools parted gdisk build-essential python3-pyqt5 gpg
+sudo apt install rsync squashfs-tools xorriso genisoimage syslinux-utils dosfstools mtools parted gdisk build-essential python3-pyqt5 gpg docker.io
 ```
+
+> ℹ️ You don't need to build the Docker image yourself: before writing the image, the GUI's Summary screen offers a **Build Docker Image** button that creates it for you if it isn't built yet.
+
+If Docker gives you a "permission denied" error instead of building, add your user to the `docker` group rather than running DTails as root:
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+Then log out and back in (or run `newgrp docker` in your current shell) for it to take effect.
 
 ## Getting started
 Clone the repository with:

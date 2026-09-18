@@ -1,7 +1,14 @@
 import os, pwd, subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-from src.runner import run_selected_actions, run_selected_actions_stream
+from src.runner import (
+    run_selected_actions,
+    run_selected_actions_stream,
+    run_selected_actions_stream_docker,
+    container_build_available,
+    remove_container_build_image,
+    build_container_image,
+)
 
 from PyQt5.QtCore import Qt, QSize, QThread, pyqtSignal, pyqtSlot, QUrl
 from PyQt5.QtGui import QIcon, QPixmap, QDesktopServices
@@ -451,7 +458,10 @@ class LogWorker(QThread):
                     f.flush()
                     self.chunk.emit(s)
 
-                run_selected_actions_stream(
+                build_fn = (run_selected_actions_stream_docker
+                            if getattr(self.state, "use_container_build", False)
+                            else run_selected_actions_stream)
+                build_fn(
                     self.state,
                     self.image_path,
                     sink=_sink,
@@ -469,6 +479,25 @@ class LogWorker(QThread):
             exit_code = 1
 
         self.finished_code.emit(exit_code)
+
+class ContainerImageBuildWorker(QThread):
+    chunk = pyqtSignal(str)
+    finished_ok = pyqtSignal(bool)
+
+    def __init__(self, cwd: str):
+        super().__init__()
+        self.cwd = cwd
+
+    def run(self):
+        def _sink(s: str):
+            self.chunk.emit(s)
+        ok = False
+        try:
+            ok = build_container_image(sink=_sink, cwd=self.cwd)
+        except Exception as e:
+            self.chunk.emit(f"\n[ERROR] {e}\n")
+        self.finished_ok.emit(ok)
+
 
 class DDFlashWorker(QThread):
     progress = pyqtSignal(int)
@@ -1088,10 +1117,69 @@ class SummaryTab(QWidget):
         self.lbl.setMargin(8)
         inner_v.addWidget(self.lbl)
         self.scroll.setWidget(inner)
+
+        container_row = QHBoxLayout()
+        self.container_chk = QCheckBox("Build inside pinned Docker container (reproducible across machines)")
+        self.container_chk.toggled.connect(self._on_container_toggle)
+        container_row.addWidget(self.container_chk)
+        container_row.addStretch(1)
+        self.build_img_btn = QPushButton("Build Docker Image")
+        self.build_img_btn.setStyleSheet(
+            "QPushButton { background-color: #eaf2ff; color: #1a1a1a; border: 1px solid #c3d6f0; "
+            "border-radius: 4px; padding: 4px 10px; }"
+            "QPushButton:disabled { background-color: #f0f0f0; color: #999999; border-color: #dddddd; }"
+        )
+        self.build_img_btn.clicked.connect(self._build_container_image)
+        container_row.addWidget(self.build_img_btn)
+        v.addLayout(container_row)
+        self._refresh_container_availability()
+
         v.addLayout(make_nav_buttons(go_back=go_back, go_write=self._write))
         self.refresh()
     def refresh(self) -> None:
         self.lbl.setText(self.state.summary_html())
+    def _on_container_toggle(self, checked: bool) -> None:
+        self.state.use_container_build = bool(checked)
+    def _refresh_container_availability(self) -> None:
+        ok, reason = container_build_available()
+        self.container_chk.setChecked(bool(getattr(self.state, "use_container_build", False)) and ok)
+        self.container_chk.setEnabled(ok)
+        self.container_chk.setToolTip("" if ok else reason)
+        if not ok:
+            self.state.use_container_build = False
+        # No docker at all, or no permission to use it: the button can't fix either.
+        docker_missing = (not ok) and reason.startswith("docker is not installed")
+        permission_issue = "permission denied" in reason.lower()
+        self.build_img_btn.setVisible(not docker_missing)
+        self.build_img_btn.setEnabled(not ok and not permission_issue)
+        if ok:
+            self.build_img_btn.setToolTip("Image already built.")
+        elif permission_issue:
+            self.build_img_btn.setToolTip(reason)
+        else:
+            self.build_img_btn.setToolTip("")
+    def _build_container_image(self) -> None:
+        dlg = LiveLogDialog(self)
+        dlg.setWindowTitle("Building Docker Image")
+        dlg.setWindowModality(Qt.WindowModal)
+        dlg.show()
+
+        self._img_build_worker = ContainerImageBuildWorker(cwd=os.getcwd())
+        self._img_build_worker.chunk.connect(dlg.append_text)
+
+        def _on_done(ok: bool):
+            dlg.append_text.emit(
+                "\n[INFO] Image build succeeded.\n" if ok else
+                "\n[ERROR] Image build failed — see output above.\n"
+            )
+            self._refresh_container_availability()
+            if ok:
+                self.state.use_container_build = True
+                self.container_chk.setChecked(True)
+            dlg.raise_()
+            dlg.activateWindow()
+        self._img_build_worker.finished_ok.connect(_on_done)
+        self._img_build_worker.start()
     def _write(self) -> None:
         if callable(self.on_write_image):
             self.on_write_image()
@@ -1294,6 +1382,16 @@ class MainWindow(QMainWindow):
             dlg.append_text.emit(f"\n[INFO] Job finished with code {code}.\n")
             log_file = os.path.join(os.getcwd(), "log.txt")
             QMessageBox.information(dlg, "Done", f"Write job completed.\n\nLog saved to:\n{log_file}")
+            if getattr(self.state, "use_container_build", False):
+                reply = QMessageBox.question(
+                    dlg, "Scrub the container?",
+                    "Scrub the dtails-build container/image now?\n\n"
+                    "Next container build will need the image rebuilt — use the "
+                    "'Build Docker Image' button on the Summary screen.",
+                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No,
+                )
+                if reply == QMessageBox.Yes:
+                    remove_container_build_image(sink=dlg.append_text.emit)
             dlg.raise_()
             dlg.activateWindow()
         self._log_worker.finished_code.connect(_on_done)
