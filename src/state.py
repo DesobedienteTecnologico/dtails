@@ -40,6 +40,7 @@ class AppState:
     selected_deletions: List[str] = field(default_factory=list)
     options_json: Optional[dict] = None
     version_overrides: Dict[str, str] = field(default_factory=dict)
+    use_container_build: bool = True
 
     # ---------- size helpers ----------
 

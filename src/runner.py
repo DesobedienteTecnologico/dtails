@@ -296,7 +296,8 @@ def _flash_future_iso_direct_to_device(device_path: str, sink: Optional[Sink], c
     _run_stream(f"sudo parted -s '{device_path}' set 1 hidden on", sink, cwd)
     _run_stream(f"sudo parted -s '{device_path}' set 1 legacy_boot on", sink, cwd)
     _run_stream(f"sudo parted -s '{device_path}' set 1 esp on", sink, cwd)
-    _run_stream(f"sudo parted -s '{device_path}' set 1 no_automount on", sink, cwd)
+    # || true: parted 3.5 (Debian bookworm) rejects this flag; _pin_gpt_guids below sets the same GPT bit via sgdisk.
+    _run_stream(f"sudo parted -s '{device_path}' set 1 no_automount on || true", sink, cwd)
 
     # Pin GPT GUIDs (keep base disk GUID so Tails repartitions on first boot)
     _pin_gpt_guids(device_path, sink, cwd, epoch, disk_guid)
@@ -555,7 +556,8 @@ def _build_img_from_future_iso(sink: Optional[Sink], cwd: str, epoch: int, out_n
         _run_stream(f"sudo parted -s '{loopdev}' set 1 hidden on", sink, cwd)
         _run_stream(f"sudo parted -s '{loopdev}' set 1 legacy_boot on", sink, cwd)
         _run_stream(f"sudo parted -s '{loopdev}' set 1 esp on", sink, cwd)
-        _run_stream(f"sudo parted -s '{loopdev}' set 1 no_automount on", sink, cwd)
+        # || true: parted 3.5 (Debian bookworm) rejects this flag; _pin_gpt_guids below sets the same GPT bit via sgdisk.
+        _run_stream(f"sudo parted -s '{loopdev}' set 1 no_automount on || true", sink, cwd)
 
         # Pin GPT GUIDs (keep base disk GUID so Tails repartitions on first boot)
         _pin_gpt_guids(loopdev, sink, cwd, epoch, disk_guid)
@@ -762,6 +764,140 @@ def run_selected_actions_stream(state: Any, image_path: str, sink: Sink, cwd: Op
 
 def run_selected_actions(state: Any, image_path: str, cwd: Optional[str] = None) -> str:
     return _run_internal(state, image_path, sink=None, cwd=cwd, collect=True)
+
+
+_CONTAINER_IMAGE = "dtails-build"
+_CONTAINER_DRIVER = "container_driver.py"
+_CONTAINER_STATE_FILE = ".dtails_container_state.json"
+
+
+def container_build_available() -> Tuple[bool, str]:
+    """True if docker is on PATH and the pinned image is built; reason is set when False."""
+    import shutil
+    if not shutil.which("docker"):
+        return False, "docker is not installed or not on PATH"
+    try:
+        proc = subprocess.run(
+            ["docker", "image", "inspect", _CONTAINER_IMAGE],
+            capture_output=True, text=True,
+        )
+    except Exception as e:
+        return False, f"could not run docker: {e}"
+    if proc.returncode != 0:
+        if "permission denied" in proc.stderr.lower():
+            return False, (
+                "permission denied talking to the Docker daemon — add your user to the "
+                "'docker' group instead of running as root: "
+                "sudo usermod -aG docker $USER, then log out and back in "
+                "(or run `newgrp docker`)"
+            )
+        return False, (
+            f"image '{_CONTAINER_IMAGE}' not found — build it once with: "
+            f"docker build -t {_CONTAINER_IMAGE} ."
+        )
+    return True, ""
+
+
+def build_container_image(sink: Optional[Sink] = None, cwd: Optional[str] = None) -> bool:
+    """Builds the pinned dtails-build image. Returns True once it exists."""
+    import shutil
+    if not shutil.which("docker"):
+        _emit(sink, "[ERROR] docker is not installed or not on PATH.\n")
+        return False
+    _emit(sink, _log_title(f"Building '{_CONTAINER_IMAGE}' image"))
+    _run_stream(f"docker build -t {_CONTAINER_IMAGE} .", sink, cwd)
+    ok, _ = container_build_available()
+    return ok
+
+
+def run_selected_actions_stream_docker(state: Any, image_path: str, sink: Sink,
+                                       cwd: Optional[str] = None) -> None:
+    """Same as run_selected_actions_stream, but run inside the pinned Docker container for reproducible output."""
+    import json as _json
+    import shlex
+
+    cwd = os.path.abspath(cwd or os.getcwd())
+    if not image_path:
+        raise ValueError("Image path is required.")
+    image_path = os.path.abspath(image_path)
+
+    ok, reason = container_build_available()
+    if not ok:
+        _emit(sink, f"[ERROR] Container build unavailable: {reason}\n")
+        return
+
+    if not os.path.isfile(os.path.join(cwd, _CONTAINER_DRIVER)):
+        _emit(sink, f"[ERROR] {_CONTAINER_DRIVER} not found in {cwd}\n")
+        return
+
+    # Translate the host image path to whatever the container will see it at under /work.
+    mounts = [f"-v {shlex.quote(cwd)}:/work"]
+    rel = os.path.relpath(image_path, cwd)
+    if not rel.startswith(os.pardir + os.sep) and rel != os.pardir:
+        # Inside the repo dir: reachable under /work.
+        container_image_path = "/work/" + rel.replace(os.sep, "/")
+    else:
+        # Outside the repo dir: mount its dir at the same absolute path.
+        image_dir = os.path.dirname(image_path)
+        mounts.append(f"-v {shlex.quote(image_dir)}:{shlex.quote(image_dir)}:ro")
+        container_image_path = image_path
+
+    state_payload = {
+        "options_json": getattr(state, "options_json", {}) or {},
+        "selected_image": container_image_path,
+        "selected_device": getattr(state, "selected_device", {}) or {},
+        "selected_additions": getattr(state, "selected_additions", []) or [],
+        "selected_deletions": getattr(state, "selected_deletions", []) or [],
+        "version_overrides": getattr(state, "version_overrides", {}) or {},
+    }
+    state_path = os.path.join(cwd, _CONTAINER_STATE_FILE)
+    with open(state_path, "w", encoding="utf-8") as f:
+        _json.dump(state_payload, f)
+
+    _emit(sink, _log_title("Running build inside pinned Docker container"))
+    _emit(sink, f"[INFO] Image: {_CONTAINER_IMAGE}  (see Dockerfile for pinned tool versions)\n")
+
+    cmd = (
+        "docker run --rm --privileged "
+        + " ".join(mounts)
+        + f" -w /work {shlex.quote(_CONTAINER_IMAGE)} "
+        f"python3 /work/{_CONTAINER_DRIVER} /work/{_CONTAINER_STATE_FILE}"
+    )
+    try:
+        _run_stream(cmd, sink, cwd)
+    finally:
+        try:
+            os.remove(state_path)
+        except OSError:
+            pass
+
+
+def remove_container_build_image(sink: Optional[Sink] = None) -> None:
+    """Removes any stray dtails-build containers plus the dtails-build image itself."""
+    import shutil
+    if not shutil.which("docker"):
+        _emit(sink, "[WARN] docker not found on PATH — nothing to clean up.\n")
+        return
+    try:
+        out = subprocess.run(
+            ["docker", "ps", "-a", "-q", "--filter", f"ancestor={_CONTAINER_IMAGE}"],
+            capture_output=True, text=True,
+        )
+        stray_ids = [line for line in out.stdout.splitlines() if line.strip()]
+        if stray_ids:
+            subprocess.call(["docker", "rm", "-f", *stray_ids],
+                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception as e:
+        _emit(sink, f"[WARN] Could not check for stray containers: {e}\n")
+
+    rc = subprocess.call(["docker", "rmi", "-f", _CONTAINER_IMAGE],
+                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if rc == 0:
+        _emit(sink, f"[INFO] Swept the '{_CONTAINER_IMAGE}' container and image. "
+                     f"Use the GUI's 'Build Docker Image' button (or run "
+                     f"`docker build -t {_CONTAINER_IMAGE} .`) before your next container build.\n")
+    else:
+        _emit(sink, f"[WARN] Could not remove image '{_CONTAINER_IMAGE}' (already gone, or docker error).\n")
 
 
 def _run_internal(state: Any, image_path: str, sink: Optional[Sink], cwd: Optional[str], collect: bool) -> str:
